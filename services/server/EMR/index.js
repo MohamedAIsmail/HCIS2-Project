@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 // const path = require('path');
 const morgan = require('morgan');
+const bodyParser = require('body-parser');
 
 // REQUIRING ROUTES
 const patientRoute = require('./routes/patientRouter');
@@ -19,6 +20,9 @@ app.use(cors());
 
 // Middlewares
 app.use(express.json());
+
+// Parse application/json
+app.use(bodyParser.json());
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));

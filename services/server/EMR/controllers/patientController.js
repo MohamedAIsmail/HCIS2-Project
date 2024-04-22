@@ -1,13 +1,14 @@
 const slugify = require('slugify');
 const asyncHandler = require('express-async-handler');
 
+
 const Patient = require('../models/patientModel');
 
 // @desc    Get list of categories
 // @route   GET /api/v1/categories
 // @access  Public
 exports.getPatients = asyncHandler(async (req, res) => {
-
+  
   const patients = await Patient.find({});
   res.status(200).json({ data: patients });
 });
@@ -29,7 +30,8 @@ exports.getPatient = asyncHandler(async (req, res) => {
 // @access  Private
 exports.createPatient = asyncHandler(async (req, res) => {
   // Extracting patient details from the request body
-  const { name, weight, height, age, complaints, drugs, eyeMeasurements, illnesses, operations, prescriptions, recommendations, vaccines, vitals } = req.body;
+  const { name, weight, height, age, complaints, drugs, eyeMeasurements, 
+    illnesses, operations, prescriptions, recommendations, vaccines, vitals } = req.body;
 
   // Creating a new patient record
   const patient = await Patient.create({
@@ -57,19 +59,22 @@ exports.createPatient = asyncHandler(async (req, res) => {
 // @access  Private
 exports.updatePatient = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { name } = req.body;
-
-  const Patient = await Patient.findOneAndUpdate(
+  console.log(req.res);
+  const { name, weight, height, age, complaints, drugs, eyeMeasurements, illnesses, operations, prescriptions, recommendations, vaccines, vitals } = req.body;
+  console.log(name)
+  const updatedPatient = await Patient.findOneAndUpdate(
     { _id: id },
-    { name, slug: slugify(name) },
+    { name, weight, height, age, complaints, drugs, eyeMeasurements, illnesses, operations, prescriptions, recommendations, vaccines, vitals },
     { new: true }
   );
 
-  if (!Patient) {
-    res.status(404).json({ msg: `No Patient for this id ${id}` });
+  if (!updatedPatient) {
+    return res.status(404).json({ msg: `No patient found for this ID: ${id}` });
   }
-  res.status(200).json({ data: Patient });
+
+  res.status(200).json({ data: updatedPatient });
 });
+
 
 // @desc    Delete specific Patient
 // @route   DELETE /api/v1/categories/:id
