@@ -53,30 +53,3 @@ process.on("unhandledRejection", (err) => {
   });
 });
 
-//====================================================================
-
-// dotenv.config(); // Load environment variables from .env file
-// const PORT =  process.env.PORT || 3000;
-
-//====================================================================
-// EMR_app.use(cors({                     
-//   origin: 'http://localhost:3000',
-// }));
-
-// connectionModule.connect((err) => {
-//   if (err){
-//     console.error('Error connecting to database:', err);
-//     return;
-//   }
-
-//   console.log('DATABASE CONNECTED');
-  
-//   EMR_app.listen(PORT, () => {
-//     console.log(`SERVER: http://localhost:${PORT}`);
-//   });
-// });
-//====================================================================
-// EMR_app.use(express.json());
-// EMR_app.use('/', RecordRoute);
-// EMR_app.use('/', PrescriptionRoute);
-// EMR_app.use('/', medicalHistoryRoute);
