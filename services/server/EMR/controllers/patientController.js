@@ -28,8 +28,27 @@ exports.getPatient = asyncHandler(async (req, res) => {
 // @route   POST  /api/v1/categories
 // @access  Private
 exports.createPatient = asyncHandler(async (req, res) => {
-  const name = req.body.name;
-  const patient = await Patient.create({ name });
+  // Extracting patient details from the request body
+  const { name, weight, height, age, complaints, drugs, eyeMeasurements, illnesses, operations, prescriptions, recommendations, vaccines, vitals } = req.body;
+
+  // Creating a new patient record
+  const patient = await Patient.create({
+    name,
+    weight,
+    height,
+    age,
+    complaints,
+    drugs,
+    eyeMeasurements,
+    illnesses,
+    operations,
+    prescriptions,
+    recommendations,
+    vaccines,
+    vitals
+  });
+
+  // Sending response with the created patient data
   res.status(201).json({ data: patient });
 });
 
