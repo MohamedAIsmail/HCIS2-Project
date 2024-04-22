@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');  // for database connection and schemas
 
-const dbConncetion = () => {
+const dbConnection = () => {
     console.log(process.env.DB_URI)
     mongoose.connect(process.env.DB_URI)
         .then((conn) => {
@@ -8,4 +8,4 @@ const dbConncetion = () => {
         })
 };
 
-module.exports = dbConncetion;
+module.exports = dbConnection;

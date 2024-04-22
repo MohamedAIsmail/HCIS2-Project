@@ -1,110 +1,110 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const patientSchema = new mongoose.Schema(
     {
-        name: {
+        Name: {
             type: String,
         },
 
-        weight: {
+        Weight: {
             type: String,
         },
 
-        height: {
+        Height: {
             type: String,
         },
 
-        age: {
+        Age: {
             type: String,
         },
 
-        complaints: [
+        Complaints: [
             {
-                complaintID: { type: mongoose.Schema.Types.ObjectId  },
-                description: { type: String  }
-            }
+                ComplaintID: { type: mongoose.Schema.Types.ObjectId },
+                Description: { type: String },
+            },
         ],
 
-        drugs: [
+        Drugs: [
             {
-                drugID: { type: mongoose.Schema.Types.ObjectId  },
-                prescriptionID: { type: mongoose.Schema.Types.ObjectId  },
-                patientID: { type: mongoose.Schema.Types.ObjectId  },
-                drugName: { type: String  },
-                drugDuration: { type: String },
-                drugDose: { type: String }
-            }
+                DrugID: { type: mongoose.Schema.Types.ObjectId },
+                PrescriptionID: { type: mongoose.Schema.Types.ObjectId },
+                PatientID: { type: mongoose.Schema.Types.ObjectId },
+                DrugName: { type: String },
+                DrugDuration: { type: String },
+                DrugDose: { type: String },
+            },
         ],
 
-        eyeMeasurements: [
+        EyeMeasurements: [
             {
-                eyeMeasurementID: { type: mongoose.Schema.Types.ObjectId  },
-                appointmentID: { type: mongoose.Schema.Types.ObjectId  },
-                leftEye: { type: String },
-                rightEye: { type: String }
-            }
+                EyeMeasurementID: { type: mongoose.Schema.Types.ObjectId },
+                AppointmentID: { type: mongoose.Schema.Types.ObjectId },
+                LeftEye: { type: String },
+                RightEye: { type: String },
+            },
         ],
 
-        illnesses: [
+        Illnesses: [
             {
-                illnessID: { type: mongoose.Schema.Types.ObjectId  },
-                patientID: { type: mongoose.Schema.Types.ObjectId  },
-                illnessDescription: { type: String  }
-            }
+                IllnessID: { type: mongoose.Schema.Types.ObjectId },
+                PatientID: { type: mongoose.Schema.Types.ObjectId },
+                IllnessDescription: { type: String },
+            },
         ],
 
-        operations: [
+        Operations: [
             {
-                operationID: { type: mongoose.Schema.Types.ObjectId  },
-                operationName: { type: String  },
-                operationDescription: { type: String }
-            }
+                OperationID: { type: mongoose.Schema.Types.ObjectId },
+                OperationName: { type: String },
+                OperationDescription: { type: String },
+            },
         ],
 
-        prescriptions: [
+        Prescriptions: [
             {
-                prescriptionID: { type: mongoose.Schema.Types.ObjectId  },
-                patientID: { type: mongoose.Schema.Types.ObjectId  },
-                appointmentID: { type: mongoose.Schema.Types.ObjectId  },
-                doctorName: { type: String },
-                diagnosis: { type: String },
-                extraNotes: { type: String },
-                createdAt: { type: Date, default: Date.now }
-            }
+                PrescriptionID: { type: mongoose.Schema.Types.ObjectId },
+                PatientID: { type: mongoose.Schema.Types.ObjectId },
+                AppointmentID: { type: mongoose.Schema.Types.ObjectId },
+                DoctorName: { type: String },
+                Diagnosis: { type: String },
+                ExtraNotes: { type: String },
+                CreatedAt: { type: Date, default: Date.now },
+            },
         ],
 
-        recommendations: [
+        Recommendations: [
             {
-                recommendationID: { type: mongoose.Schema.Types.ObjectId  },
-                appointmentID: { type: mongoose.Schema.Types.ObjectId  },
-                recommendationDescription: { type: String }
-            }
+                RecommendationID: { type: mongoose.Schema.Types.ObjectId },
+                AppointmentID: { type: mongoose.Schema.Types.ObjectId },
+                RecommendationDescription: { type: String },
+            },
         ],
 
-        vaccines: [
+        Vaccines: [
             {
-                vaccineID: { type: mongoose.Schema.Types.ObjectId  },
-                patientID: { type: mongoose.Schema.Types.ObjectId  },
-                vaccineName: { type: String },
-                vaccineType: { type: String },
-                vaccineDate: { type: Date }
-            }
+                VaccineID: { type: mongoose.Schema.Types.ObjectId },
+                PatientID: { type: mongoose.Schema.Types.ObjectId },
+                VaccineName: { type: String },
+                VaccineType: { type: String },
+                VaccineDate: { type: Date },
+            },
         ],
 
-        vitals: [
+        Vitals: [
             {
-                vitalID: { type: mongoose.Schema.Types.ObjectId  },
-                patientID: { type: mongoose.Schema.Types.ObjectId  },
-                bloodPressure: { type: String },
-                respirationRate: { type: String },
-                heartRate: { type: String },
-                diabeticTest: { type: String }
-            }
-        ]
+                VitalID: { type: mongoose.Schema.Types.ObjectId },
+                PatientID: { type: mongoose.Schema.Types.ObjectId },
+                BloodPressure: { type: String },
+                RespirationRate: { type: String },
+                HeartRate: { type: String },
+                DiabeticTest: { type: String },
+            },
+        ],
     },
     { timestamps: true }
 );
 
-const Patient = mongoose.model('Patient', patientSchema);
+const Patient = mongoose.model("Patient", patientSchema);
 
 module.exports = Patient;
