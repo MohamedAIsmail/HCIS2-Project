@@ -3,6 +3,14 @@ const express = require('express');
 const { protect, allowedTo } = require('../controllers/authController');
 
 const {
+    registerAdminValidator,
+    getAdminValidator,
+    updateAdminValidator,
+    deleteAdminValidator,
+    changeAdminPasswordValidator,
+} = require('../utils/validators/adminValidator');
+
+const {
     registerAdmin,
     getAdmin,
     getAdmins,
@@ -20,14 +28,14 @@ const router = express.Router();
 
 router.route('/')
     .get(getAdmins)
-    .post(registerAdmin)
+    .post(registerAdminValidator, registerAdmin)
     .delete(deleteAll)
 
 router.route('/:id')
-    .get(getAdmin)
-    .put(updateAdmin)
-    .delete(deleteAdmin)
+    .get(getAdminValidator, getAdmin)
+    .put(updateAdminValidator, updateAdmin)
+    .delete(deleteAdminValidator, deleteAdmin)
 
-router.put('/changePassword/:id', updateAdminPassword);
+router.put('/changePassword/:id', changeAdminPasswordValidator, updateAdminPassword);
 
 module.exports = router;

@@ -67,7 +67,7 @@ exports.updateAdminPassword = asyncHandler(async (req, res, next) => {
     const admin = await Admin.findByIdAndUpdate(
         adminId,
         {
-            password: await bcrypt.hash(req.body.password, 12),
+            password: await bcrypt.hash(req.body.newPassword, 12),
             passwordChangedAt: Date.now(),
         },
         { new: true }
