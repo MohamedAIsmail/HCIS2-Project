@@ -1,16 +1,21 @@
-const express = require('express');
-const dotenv = require('dotenv');
-const cors = require('cors');
-// const path = require('path');
-const morgan = require('morgan');
+// Core Modules
 const bodyParser = require('body-parser');
+// const path = require('path');
+
+// Third Party Modules
+const express = require('express');
+const cors = require('cors');
+const morgan = require('morgan');
+const dotenv = require('dotenv');
+
+// Project Files
+dotenv.config({ path: 'config.env' });
+const ApiError = require('./utils/apiError');
+const dbConncetion = require('./config/database');
+const globalError = require('./middlewares/errorMiddleware');
 
 // REQUIRING ROUTES
 const patientRoute = require('./routes/patientRouter');
-
-dotenv.config({ path: 'config.env' });
-
-const dbConncetion = require('./config/database');
 
 // Connect the database
 dbConncetion();
@@ -30,10 +35,15 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // WORKS WHEN THE URL IS NOT IN THE PREDEFINED URIS
-// app.all("*", (req, res, next) => {
-//   // CREATE ERROR AND SEND IT TO GLOBAL ERROR HANDLING MIDDLEWARE
-//   next(new ApiError(`Can't find this route: ${req.originalUrl}`, 400));
-// });
+app.all("*", (req, res, next) => {
+  // CREATE ERROR AND SEND IT TO GLOBAL ERROR HANDLING MIDDLEWARE
+  next(new ApiError(`Can't find this route: ${req.originalUrl}`, 400));
+});
+
+// GLOBAL ERROR HANDLING MIDDLEWARE FOR EXPRESS
+// EXPLAINATION: any error occurs in req - res process is caught here.
+app.use(globalError);
+
 // Handle requests for /favicon.ico
 app.get('/favicon.ico', (req, res) => {
   res.status(204).end();
