@@ -76,3 +76,11 @@ exports.deleteHealthcareProvider = asyncHandler(async (req, res) => {
     }
     res.status(204).send();
 });
+
+// @desc   Delete All healthcare providers
+// @route  DELETE /api/v1/healthcare-providers
+// @access Private
+exports.deleteAll = asyncHandler(async (req, res, next) => {
+    await HealthcareProvider.deleteMany({});
+    res.json({ message: 'All healthcare providers have been deleted.' });
+});

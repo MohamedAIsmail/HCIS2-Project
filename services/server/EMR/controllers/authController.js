@@ -28,7 +28,7 @@ exports.adminLogin = asyncHandler(async (req, res, next) => {
 
     res.cookie('authToken', token);
 
-    res.status(200).json({ data: admin, token });
+    res.status(200).json({ admin, token });
 });
 
 // @desc   Logout Admin
@@ -40,7 +40,6 @@ exports.adminLogout = asyncHandler(async (req, res, next) => {
     res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private, max-age=0');
     res.status(200).json({ message: "Cookie is deleted successfully" });
 });
-
 
 // @desc    make sure the admin is logged in
 exports.protect = asyncHandler(async (req, res, next) => {
@@ -91,7 +90,6 @@ exports.allowedTo = (...roles) => asyncHandler(async (req, res, next) => {
 
     next();
 });
-
 
 // @desc   Forget Password
 // @route  POST /api/v1/auth/forgetPassowrd
