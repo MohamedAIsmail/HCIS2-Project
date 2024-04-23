@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');  // for database connection and schemas
+const mongoose = require('mongoose');  
 
 const dbConnection = () => {
     console.log(process.env.DB_URI)

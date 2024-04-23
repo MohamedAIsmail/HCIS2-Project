@@ -72,7 +72,7 @@ exports.createPatient = asyncHandler(async (req, res) => {
 // @access  Private
 exports.updatePatient = asyncHandler(async (req, res) => {
     const { id } = req.params;
-    const { name } = req.body;
+    const { Name } = req.body;
 
     const Patient = await Patient.findOneAndUpdate(
         { _id: id },
