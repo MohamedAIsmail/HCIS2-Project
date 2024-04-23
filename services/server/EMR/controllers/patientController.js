@@ -32,32 +32,35 @@ exports.createPatient = asyncHandler(async (req, res) => {
 // @route   PUT /api/v1/patients/:id
 // @access  Private
 exports.updatePatient = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const updateFields = req.body;
 
-    const patient = await Patient.findByIdAndUpdate(req.params.id, req.body, {
+    const patient = await Patient.findByIdAndUpdate(id, updateFields, {
         new: true,
         runValidators: true,
     });
     if (!patient) {
-        return res.status(404).json({ success: false, msg: `No patient found for this id: ${req.params.id}` });
+        return res.status(404).json({ success: false, msg: `No patient found for this id: ${id}` });
     }
-    res.status(200).json({ success: true,  patient });
+    res.status(200).json({ success: true, patient });
 });
 
 // @desc    Delete specific patient
 // @route   DELETE /api/v1/patients/:id
 // @access  Private
 exports.deletePatient = asyncHandler(async (req, res) => {
-    const patient = await Patient.findByIdAndDelete(req.params.id);
-    if (!patient) {
-        return res.status(404).json({ success: false, msg: `No patient found for this id: ${req.params.id}` });
+    const { id } = req.params;
+    const deletedPatient = await Patient.findByIdAndDelete(id);
+    if (!deletedPatient) {
+        return res.status(404).json({ success: false, msg: `No patient found for this id: ${id}` });
     }
     res.status(204).json({ success: true, data: {} });
 });
 
 // @desc   Delete All Patients
-// @route  DELETE /api/v1/patient
+// @route  DELETE /api/v1/patients
 // @access Private
-exports.deleteAll = asyncHandler(async (req, res, next) => {
+exports.deleteAll = asyncHandler(async (req, res) => {
     await Patient.deleteMany({});
     res.json({ message: 'All patients have been deleted.' });
 });

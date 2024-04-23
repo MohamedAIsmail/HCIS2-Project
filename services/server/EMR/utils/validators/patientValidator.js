@@ -30,9 +30,9 @@ exports.createPatientValidator = [
         .notEmpty()
         .withMessage('Name is required'),
 
-    check('contact')
+    check('phoneNumber')
         .notEmpty()
-        .withMessage('Contact is required'),
+        .withMessage('Phone number is required'),
 
     check('weight')
         .notEmpty()
@@ -52,7 +52,7 @@ exports.createPatientValidator = [
         .isNumeric()
         .withMessage('Age must be a number'),
 
-    check('bloodType')
+    check('medicalHistory.bloodType')
         .notEmpty()
         .withMessage('Blood type is required'),
 

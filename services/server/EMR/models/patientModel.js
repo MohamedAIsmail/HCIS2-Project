@@ -1,49 +1,64 @@
 const mongoose = require('mongoose');
 
 const patientSchema = new mongoose.Schema({
-  username: { type: String, required: [true, "username is required"] },
-  email: {
-    type: String,
-    required: [true, 'Email is required'],
-    unique: true,
-    lowercase: true,
-  },
-  password: {
-    type: String,
-    required: [true, 'Password is required'],
-    minlength: [6, 'Too short password'],
-  },
-  name: {
-    type: String,
-    required: [true, 'Name is required'],
-  },
-  contact: { type: String, required: [true, 'contact is required'] },
-  weight: { type: Number, required: [true, "weight is required"] },
-  height: { type: Number, required: [true, "height is required"] },
-  age: { type: Number, required: [true, "age is required"] },
-  bloodType: { type: String , required: [true, "blood type is required"] },
-  allergies: [{ type: String }],
-  medications: [{ type: String }],
-  surgeries: [{ type: String }],
-  chronicConditions: [{ type: String }],
-  lastVisit: { type: Date },
-  nextAppointment: { type: Date },
-  insuranceProvider: { type: String },
-  insurancePolicyNumber: { type: String },
-  emergencyContacts: {
-    type: [{
+    username: { type: String, required: [true, "Username is required"] },
+    email: {
+        type: String,
+        required: [true, 'Email is required'],
+        unique: true,
+        lowercase: true,
+    },
+    password: {
+        type: String,
+        required: [true, 'Password is required'],
+        minlength: [6, 'Password should be at least 6 characters long'],
+    },
+    name: {
+        type: String,
+        required: [true, 'Name is required'],
+    },
+    phoneNumber: {
+      type: String,
+      required: [true, 'You must enter your phone number'],
+    },
+    weight: { type: Number, required: [true, "Weight is required"] },
+    height: { type: Number, required: [true, "Height is required"] },
+    age: { type: Number, required: [true, "Age is required"] },
+    gender: { type: String, required: [true, "Gender is required"] },
+    emergencyContacts: [{
         name: { type: String },
         relationship: { type: String },
         contact: { type: String },
     }],
-    validate: [arrayMinLength, 'At least one emergency contact is required']
-  }
-},
-{ timestamps: true });
-
-function arrayMinLength(val) {
-  return val.length > 0;
-}
+    insuranceProvider: { type: String },
+    insurancePolicyNumber: { type: String },
+    medicalHistory: {
+        bloodType: { type: String },
+        bloodPressure: { type: Number },
+        respirationRate: { type: Number },
+        heartRate: { type: Number },
+        diabeticTest: { type: Number },
+        allergies: [{ type: String }],
+        medications: [{ type: String }],
+        surgeries: [{ type: String }],
+        chronicConditions: [{ type: String }],
+        lastVisit: { type: Date },
+        nextAppointment: { type: Date },
+        note: { type: String },
+        prescriptions: [{
+            id: { type: mongoose.Schema.Types.ObjectId, ref: 'Prescription' },
+            diagnosis: { type: String },
+            date: { type: Date },
+        }],
+        drugs: [{
+            id: { type: mongoose.Schema.Types.ObjectId, ref: 'Drug' },
+            drugDose: { type: String },
+            drugDuration: { type: String },
+            drugName: { type: String },
+            date: { type: Date },
+        }]
+    }
+}, { timestamps: true });
 
 const Patient = mongoose.model('Patient', patientSchema);
 
