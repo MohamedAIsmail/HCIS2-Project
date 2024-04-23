@@ -27,6 +27,11 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 
+// Handle requests for /favicon.ico
+app.get('/favicon.ico', (req, res) => {
+  res.status(204).end();
+});
+
 // MOUNT ROUTES
 mountRoutes(app);
 
@@ -44,11 +49,6 @@ app.all("*", (req, res, next) => {
 // GLOBAL ERROR HANDLING MIDDLEWARE FOR EXPRESS
 // EXPLAINATION: any error occurs in req - res process is caught here.
 app.use(globalError);
-
-// Handle requests for /favicon.ico
-app.get('/favicon.ico', (req, res) => {
-  res.status(204).end();
-});
 
 const PORT = process.env.PORT || 8000;
 
