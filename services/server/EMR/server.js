@@ -15,19 +15,20 @@ const dbConncetion = require('./config/database');
 const globalError = require('./middlewares/errorMiddleware');
 
 // REQUIRING ROUTES
-const patientRoute = require('./routes/patientRouter');
+const mountRoutes = require('./routes');
 
 // Connect the database
 dbConncetion();
 
 const app = express();
-app.use(cors());
 
 // Middlewares
+app.use(cors());
 app.use(express.json());
-
-// Parse application/json
 app.use(bodyParser.json());
+
+// MOUNT ROUTES
+mountRoutes(app);
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
@@ -50,8 +51,6 @@ app.get('/favicon.ico', (req, res) => {
 });
 
 const PORT = process.env.PORT || 8000;
-
-app.use('/', patientRoute);
 
 const server = app.listen(PORT, () => {
   console.log(`App is Runinng  on Port http://localhost:${PORT}/`);
