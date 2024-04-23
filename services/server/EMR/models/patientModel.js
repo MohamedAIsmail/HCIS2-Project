@@ -37,7 +37,7 @@ const patientSchema = new mongoose.Schema({
         contact: { type: String },
     }],
     validate: [arrayMinLength, 'At least one emergency contact is required']
-}
+  }
 },
 { timestamps: true });
 
