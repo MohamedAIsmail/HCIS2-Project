@@ -74,7 +74,7 @@ exports.updateHealthcareProviderValidator = [
 exports.getHealthcareProviderValidator = [
     check('id')
         .isMongoId()
-        .withMessage("Invalid member ID format"),
+        .withMessage("Invalid healthcare provider ID format"),
 
     validatorMiddleware,
 ];
@@ -82,7 +82,7 @@ exports.getHealthcareProviderValidator = [
 exports.deleteHealthcareProviderValidator = [
     check('id')
         .isMongoId()
-        .withMessage('Invalid Event ID Format'),
+        .withMessage('Invalid healthcare provider ID Format'),
 
     validatorMiddleware,
 ];
