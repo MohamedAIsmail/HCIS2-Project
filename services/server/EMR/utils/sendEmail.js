@@ -14,7 +14,7 @@ const sendEmail = async (options) => {
 
     // 2- define email options "from - to - subject - content"
     const mailOptions = {
-        from: `ASME CUSB <${process.env.EMAIL_USERNAME}>`,
+        from: `HCIS CUSB <${process.env.EMAIL_USERNAME}>`,
         to: options.email,
         subject: options.subject,
         html: options.message,

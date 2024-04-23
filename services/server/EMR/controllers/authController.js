@@ -122,7 +122,7 @@ exports.forgetPassword = asyncHandler(async (req, res, next) => {
     <p>We have received a request to reset your password. Please enter the following code to complete the process.</p>
     <p>${resetCode}</p>
     <p>Thanks for helping us keep your account secure</p>
-    <p>Best regards,<br>ASME CUSB Team</p>`
+    <p>Best regards,<br>HCIS CUSB Tech Team</p>`
 
     // 3- Send the reset code via email
     // asyncHandler catches error by try catch here is used to set the attributes to undefined to not be stored in database and the response is failed asln!
