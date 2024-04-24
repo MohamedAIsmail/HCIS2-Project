@@ -19,7 +19,7 @@ const {
 // Route to get all patients and create a new patient
 router.route("/")
     .get(getPatients)
-    .post(createPatientValidator, createPatient);
+    .post(createPatient);
 
 // Route to get, update, and delete a specific patient by ID
 router.route("/:id")
