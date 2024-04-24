@@ -16,3 +16,7 @@ exports.handleA04Message = asyncHandler(async (req, res) => {
   const patient = await Patient.create(patientData);
   res.status(200).send('A04: Patient registered successfully', patient);
 });
+
+exports.constructHL7Message = (patientData){
+  
+}
