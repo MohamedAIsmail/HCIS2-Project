@@ -1,16 +1,29 @@
 const mongoose = require('mongoose');
 
 // Define a sub-schema for schedule
-const scheduleSchema = new mongoose.Schema({
-  appointmentReason: { type: String, enum: ["ROUTINE", "WALKIN", "FOLLOWUP", "EMERGENCY"] }, 
-  appointmentDuration: { type: String },
-  requestedStartDateTimeRange: { type: String },
-  priorityARQ: { type: String, enum: ["Stat", "ASAP", "Routine", "Timing critical"]},
-  repeatingInterval: { type: String },
-  repeatingIntervalDuration: { type: String },
-  placerContactPerson: { type: String }, 
-  PlacerContactPhoneNumber: { type: Number }
-});
+const scheduleSchema = new mongoose.Schema(
+  {
+    appointmentReason: { type: String, enum: ["ROUTINE", "WALKIN", "FOLLOWUP", "EMERGENCY"] }, 
+
+    appointmentTime: { type: String },
+
+    appointmentDuration: { type: String },
+
+    requestedStartDateTimeRange: { type: String },
+
+    priorityARQ: { type: String, enum: ["Stat", "ASAP", "Routine", "Timing critical"]},
+
+    repeatingInterval: { type: String },
+
+    repeatingIntervalDuration: { type: String },
+
+    placerContactPerson: { type: String }, 
+
+    PlacerContactPhoneNumber: { type: String }
+
+  }, 
+  { timestamps: true }
+);
 
 const healthcareProviderSchema = new mongoose.Schema(
   {
