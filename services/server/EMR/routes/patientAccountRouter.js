@@ -6,7 +6,7 @@ const {
     getPatientValidator,
     updatePatientValidator,
     deletePatientValidator
-} = require('../utils/validators/patientValidator');
+} = require('../utils/validators/patientAccountValidator');
 
 const {
     createPatient,
@@ -14,12 +14,12 @@ const {
     getPatient,
     updatePatient,
     deletePatient
-} = require("../controllers/patientController");
+} = require("../controllers/patientAccountController");
 
 // Route to get all patients and create a new patient
 router.route("/")
     .get(getPatients)
-    .post(createPatient);
+    .post(createPatientValidator, createPatient);
 
 // Route to get, update, and delete a specific patient by ID
 router.route("/:id")

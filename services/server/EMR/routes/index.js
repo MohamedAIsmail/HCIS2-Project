@@ -1,17 +1,17 @@
-const patientRoute = require('./patientRouter');
+const patientRoute = require('./patientAccountRouter');
 const healthcareProviderRoute = require('./healthcareProviderRouter');
 const adminRoute = require('./adminRouter')
 const authRoute = require('./authRouter')
-const hl7A01Route = require('./hl7A01Router')
-const hl7A04Route = require('./hl7A04Router')
+const createAppointmentRoute = require('./appointmentScheduleRouter')
+const registerPatient = require('./patientRegisterRouter')
 
 const mountRoutes = (app) => {
     app.use('/api/v1/patient', patientRoute);
     app.use('/api/v1/healthcareProvider', healthcareProviderRoute);
     app.use('/api/v1/admin', adminRoute);
     app.use('/api/v1/auth', authRoute);
-    app.use('/api/v1/a01', hl7A01Route);
-    app.use('/api/v1/a04', hl7A04Route);
+    app.use('/api/v1/appointment', createAppointmentRoute);
+    app.use('/api/v1/registerPatient', registerPatient);
 };
 
 module.exports = mountRoutes;

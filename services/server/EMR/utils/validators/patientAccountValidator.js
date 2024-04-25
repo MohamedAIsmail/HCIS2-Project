@@ -1,6 +1,6 @@
 const { check } = require('express-validator');
 const validatorMiddleware = require('../../middlewares/validatorMiddleware');
-const Patient = require('../../models/patientModel');
+const PatientAccount = require('../../models/patientAccountModel');
 
 exports.createPatientValidator = [
     check('username')
@@ -13,7 +13,7 @@ exports.createPatientValidator = [
         .isEmail()
         .withMessage('Invalid email address')
         .custom(async (val) => {
-            return Patient.findOne({ email: val }).then((found) => {
+            return PatientAccount.findOne({ email: val }).then((found) => {
                 if (found) {
                     return Promise.reject(new Error('Email is already in use'));
                 }
@@ -73,7 +73,7 @@ exports.updatePatientValidator = [
         .isEmail()
         .withMessage('Invalid email address')
         .custom(async (val, { req }) => {
-            return Patient.findOne({ email: val }).then((found) => {
+            return PatientAccount.findOne({ email: val }).then((found) => {
                 if (found && found._id.toString() !== req.params.id) {
                     return Promise.reject(new Error('Email is already in use'));
                 }
