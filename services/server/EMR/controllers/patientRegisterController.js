@@ -51,7 +51,8 @@ exports.registerPatient = asyncHandler(async (req, res) => {
 async function parseHL7Message(message) {
     return new Promise((resolve, reject) => {
 
-        const segments = message.split('+');
+        const segments = message.split('\r');
+        
         const parsedMessage = {};
 
         segments.forEach((segment, index) => {
