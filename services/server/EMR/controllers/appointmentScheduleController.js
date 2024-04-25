@@ -5,11 +5,7 @@ exports.createAppointment = asyncHandler(async (req, res) => {
 
   const { id } = req.params;
 
-  let hl7Message = JSON.stringify(req.body.hl7Message, null, 2);
-
-  hl7Message = hl7Message.replace(/"/g, '');
-
-  const message = await parseHL7Message(hl7Message);
+  const message = await parseHL7Message(req.body.hl7Message);
 
   const patientData = message['2']['fields'];
 
@@ -85,6 +81,7 @@ async function parseHL7Message(message) {
   return new Promise((resolve, reject) => {
 
       const segments = message.split('\r');
+
       const parsedMessage = {};
 
       segments.forEach((segment, index) => {
@@ -115,9 +112,8 @@ async function parseHL7Message(message) {
           const fieldNames = segmentName === 'MSH' ? fieldNamesMSH : fieldNamesARQ;
 
           fields.slice(1).forEach((field, fieldIndex) => {
-            const fieldValue = field.replace(/\^/g, ' ');
-            segmentFields[fieldNames[fieldIndex]] = fieldValue;
-        });
+              segmentFields[fieldNames[fieldIndex]] = field;
+          });
 
           parsedMessage[index + 1] = {
               segment: segmentName,
