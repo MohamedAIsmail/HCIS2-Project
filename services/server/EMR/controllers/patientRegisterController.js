@@ -101,7 +101,8 @@ async function parseHL7Message(message) {
                     (segmentName === 'PID' ? fieldNamesPID : fieldNamesPV1));
 
             fields.slice(1).forEach((field, fieldIndex) => {
-                segmentFields[fieldNames[fieldIndex]] = field;
+                const fieldValue = field.replace(/\^/g, ' ');
+                segmentFields[fieldNames[fieldIndex]] = fieldValue;
             });
 
             parsedMessage[index + 1] = {
@@ -109,7 +110,7 @@ async function parseHL7Message(message) {
                 fields: segmentFields
             };
         });
-
+        console.log(parsedMessage);
         resolve(parsedMessage);
     });
 };
