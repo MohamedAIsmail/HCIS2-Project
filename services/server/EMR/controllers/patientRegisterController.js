@@ -3,11 +3,7 @@ const PatientRegister = require('../models/patientRegisterModel');
 
 exports.registerPatient = asyncHandler(async (req, res) => {
 
-    let hl7Message = JSON.stringify(req.body.hl7Message, null, 2);
-
-    hl7Message = hl7Message.replace(/"/g, '');
-
-    const message = await parseHL7Message(hl7Message);
+    const message = await parseHL7Message(req.body.hl7Message);
 
     const patientData = message['3']['fields'];
 
@@ -52,7 +48,7 @@ async function parseHL7Message(message) {
     return new Promise((resolve, reject) => {
 
         const segments = message.split('\r');
-        
+
         const parsedMessage = {};
 
         segments.forEach((segment, index) => {
