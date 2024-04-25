@@ -23,7 +23,7 @@ exports.createAppointment = asyncHandler(async (req, res) => {
   try {
 
     let healthcareProvider = await HealthcareProvider.findById(id);
-    console.log("after finding el doctor")
+
     if (!healthcareProvider) {
       return res.status(404).json({ success: false, msg: `No healthcare provider found for this id: ${id}` });
     }
@@ -32,8 +32,6 @@ exports.createAppointment = asyncHandler(async (req, res) => {
     if (!Array.isArray(healthcareProvider.schedule)) {
       healthcareProvider.schedule = [];
     }
-
-    console.log(bodyObject)
 
     // Push the new appointment data
     healthcareProvider.schedule.push(bodyObject);
@@ -52,7 +50,7 @@ async function parseHL7Message(message) {
   return new Promise((resolve, reject) => {
 
       const segments = message.split('\r');
-      console.log(segments)
+
       const parsedMessage = {};
 
       segments.forEach((segment, index) => {
