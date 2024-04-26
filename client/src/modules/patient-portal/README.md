@@ -1,3 +1,0 @@
-# HealU
-
-Patient Portal Module
