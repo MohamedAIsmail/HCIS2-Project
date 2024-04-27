@@ -1,22 +1,10 @@
 import React from "react";
+import { BrowserRouter as Router } from "react-router-dom";
 import "./App.css";
-import { CssBaseline, ThemeProvider } from "@mui/material";
-import { theme } from "./core/theme/theme";
-import Router from "./core/routes/router";
-import { Routes } from "react-router-dom";
-import { LoadingProvider } from "./core/services/loading-service";
-import LoadingOverlay from "./core/components/OverlapLoading";
+import router from "./router/router";
 
 function App() {
-    return (
-        <ThemeProvider theme={theme()}>
-            <CssBaseline />
-            <LoadingProvider>
-                <Routes>{Router.getRoutes()}</Routes>
-                <LoadingOverlay />
-            </LoadingProvider>
-        </ThemeProvider>
-    );
+    return <div className="App">{/* Here should be the landing page */}</div>;
 }
 
 export default App;

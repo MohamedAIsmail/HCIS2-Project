@@ -1,14 +1,10 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "types": [
-      "react",
-      "react-dom",
-      "node",
-      "@types/node",
-      "@types/react",
-      "@types/react-dom"
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
     ],
     "allowJs": true,
     "skipLibCheck": true,
@@ -22,10 +18,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "preserve"
+    "jsx": "react-jsx"
   },
   "include": [
-    "src/**/*",
-    "typing.d.ts"
-  ],
+    "src"
+  ]
 }
