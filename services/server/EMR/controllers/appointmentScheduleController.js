@@ -102,6 +102,8 @@ exports.createAppointment = asyncHandler(async (req, res) => {
   // Push the new appointment data
   healthcareProvider.schedule.push(bodyObject);
 
+  console.log("datapushed")
+
   // Save the updated document
   healthcareProvider = await healthcareProvider.save();
 
