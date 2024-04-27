@@ -45,6 +45,11 @@ const healthcareProviderSchema = new mongoose.Schema(
       minlength: [6, 'Too short password'],
     },
 
+    role: {
+      type: String,
+      default: "healthcareProvider" 
+    },
+
     name: {
       type: String,
       required: [true, 'Name is required'],

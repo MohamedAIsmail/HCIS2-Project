@@ -1,4 +1,5 @@
 const asyncHandler = require("express-async-handler");
+const bcrypt = require('bcrypt');
 const PatientAccount = require("../models/patientAccountModel");
 
 // @desc    Get list of patients
@@ -24,7 +25,22 @@ exports.getPatient = asyncHandler(async (req, res) => {
 // @route   POST /api/v1/patients
 // @access  Private
 exports.createPatient = asyncHandler(async (req, res) => {
-    const patient = await PatientAccount.create(patient_data);
+    // Extract password from the request body
+    const { password, ...rest } = req.body;
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10); // You can adjust the salt rounds as needed
+
+    // Create the patient object with hashed password
+    const patientData = {
+        ...rest,
+        password: hashedPassword
+    };
+
+    // Create the patient in the database
+    const patient = await PatientAccount.create(patientData);
+
+    // Respond with success message and created patient data
     res.status(201).json({ success: true, patient });
 });
 

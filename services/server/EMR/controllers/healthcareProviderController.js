@@ -1,5 +1,5 @@
-const slugify = require("slugify");
 const asyncHandler = require("express-async-handler");
+const bcrypt = require('bcrypt');
 const HealthcareProvider = require("../models/healthcareProviderModel");
 
 // @desc    Get list of healthcare providers
@@ -26,30 +26,52 @@ exports.getHealthcareProvider = asyncHandler(async (req, res) => {
 // @route   POST /api/v1/healthcare-providers
 // @access  Private
 exports.createHealthcareProvider = asyncHandler(async (req, res) => {
-    const {
-        username,
-        email,
-        password,
-        name,
-        specialization,
-        licenseNumber,
-        certifications,
-        schedule
-    } = req.body;
+    // Extract password from the request body
+    const { password, ...rest } = req.body;
 
-    const healthcareProvider = await HealthcareProvider.create({
-        username,
-        email,
-        password,
-        name,
-        specialization,
-        licenseNumber,
-        certifications,
-        schedule
-    });
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10); // You can adjust the salt rounds as needed
 
-    res.status(201).json({ healthcareProvider });
+    // Create the patient object with hashed password
+    const healthcareProviderData = {
+        ...rest,
+        password: hashedPassword
+    };
+
+    // Create the patient in the database
+    const healthcareProvider = await HealthcareProvider.create(healthcareProviderData);
+
+    // Respond with success message and created patient data
+    res.status(201).json({ success: true, healthcareProvider });
 });
+// exports.createHealthcareProvider = asyncHandler(async (req, res) => {
+//     const {
+//         username,
+//         email,
+//         password,
+//         name,
+//         specialization,
+//         licenseNumber,
+//         certifications,
+//         schedule
+//     } = req.body;
+
+//     // Hash the password
+//     const hashedPassword = await bcrypt.hash(password, 10); // You can adjust the salt rounds as needed
+
+//     const healthcareProvider = await HealthcareProvider.create({
+//         username,
+//         email,
+//         hashedPassword,
+//         name,
+//         specialization,
+//         licenseNumber,
+//         certifications,
+//         schedule
+//     });
+
+//     res.status(201).json({ healthcareProvider });
+// });
 
 // @desc    Update specific healthcare provider
 // @route   PUT /api/v1/healthcare-providers/:id

@@ -6,29 +6,42 @@ const { createToken, comparePasswords } = require('../utils/helperFunctions');
 const sendEmail = require('../utils/sendEmail');
 const ApiError = require('../utils/apiError');
 const Admin = require('../models/adminModel');
+const Patient = require('../models/patientAccountModel');
+const HealthcareProvider = require('../models/healthcareProviderModel');
 
 // @desc   Login
 // @route  POST /api/v1/auth/login
 // @access Public
 exports.adminLogin = asyncHandler(async (req, res, next) => {
 
-    const admin = await Admin.findOne({ email: req.body.email });
+    let user = await Admin.findOne({ email: req.body.email });
+
+    if (!user) {
+        user = await Patient.findOne({ email: req.body.email });
+        if (!user) {
+            user = await HealthcareProvider.findOne({ email: req.body.email });
+        }
+    }
 
     let isEqual = false
 
-    if (admin) {
-        isEqual = await comparePasswords(req.body.password, admin.password);
+    if (user) {
+        isEqual = comparePasswords(req.body.password, user.password);
     };
 
-    if (!admin || !isEqual) {
+    // console.log(req.body.password)
+    // console.log(user.password)
+    // console.log(user)
+
+    if (!user || !isEqual) {
         return next(new ApiError('Incorrect email or password', 401));
     };
 
-    const token = await createToken(admin._id);
+    const token = await createToken(user._id);
 
     res.cookie('authToken', token);
 
-    res.status(200).json({ admin, token });
+    res.status(200).json({ user, token });
 });
 
 // @desc   Logout Admin

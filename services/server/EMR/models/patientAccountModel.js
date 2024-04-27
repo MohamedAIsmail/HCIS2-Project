@@ -19,6 +19,11 @@ const patientAccountSchema = new mongoose.Schema(
             minlength: [6, 'Password should be at least 6 characters long'],
         },
 
+        role: {
+            type: String,
+            default: 'patient' 
+        },
+
         name: {
             type: String,
             required: [true, 'Name is required'],

@@ -3,7 +3,7 @@ const HealthcareProvider = require('../models/healthcareProviderModel');
 const net = require('net');
 
 const TCP_HOST = '127.0.0.1'; // Replace with the TCP server's IP address or hostname
-const TCP_PORT = 3000; // Make sure it matches the TCP server's port
+const TCP_PORT = 8000; // Make sure it matches the TCP server's port
 
 // Function to send data over TCP
 function sendDataOverTCP(data) {
@@ -11,7 +11,8 @@ function sendDataOverTCP(data) {
 
   client.connect(TCP_PORT, TCP_HOST, () => {
     console.log('Connected to TCP server');
-    client.write(data);
+    // client.write(data);
+    console.log("Magdy")
   });
 
   client.on('close', () => {
@@ -25,6 +26,8 @@ function sendDataOverTCP(data) {
 
 
 exports.createAppointment = asyncHandler(async (req, res) => {
+
+  console.log("createAppointment")
 
   const { id } = req.params;
 
@@ -101,8 +104,6 @@ exports.createAppointment = asyncHandler(async (req, res) => {
 
   // Push the new appointment data
   healthcareProvider.schedule.push(bodyObject);
-
-  console.log("datapushed")
 
   // Save the updated document
   healthcareProvider = await healthcareProvider.save();
