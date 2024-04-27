@@ -52,17 +52,33 @@ app.use(globalError);
 
 const PORT = process.env.PORT || 8000;
 
-const server = app.listen(PORT, () => {
-  console.log(`App is Runinng  on Port http://localhost:${PORT}/`);
+// Create a TCP server
+const server = net.createServer((socket) => {
+  console.log('TCP connection established');
+
+  // TCP data handler
+  socket.on('data', (data) => {
+    console.log(`Received data: ${data}`);
+    // Handle incoming data here
+  });
+
+  // TCP connection close handler
+  socket.on('close', () => {
+    console.log('TCP connection closed');
+    // Handle TCP connection closure here
+  });
+});
+
+server.listen(PORT, () => {
+  console.log(`App is Running on Port ${PORT}`);
 });
 
 // HANDLING REJECTION OUTSIDE EXPRESS
 // EXPLAINATION: IT IS FOR ERRORS OUT OF EXPRESS, COULD BE WRONG URL DATABASE CONNECTION THAT IS IN config.env FILE
 process.on("unhandledRejection", (err) => {
-  console.error(`UnhandledRejection Erorrs: ${err.name} | ${err.message}`);
+  console.error(`UnhandledRejection Errors: ${err.name} | ${err.message}`);
   server.close(() => {
-      console.error(`Shutting down....`);
-      process.exit(1);
+    console.error(`Shutting down....`);
+    process.exit(1);
   });
 });
-
