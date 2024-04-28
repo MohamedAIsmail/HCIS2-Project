@@ -1,7 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
+import doctorSlice from "../pages/Doctor/doctor-slice";
 
 const store = configureStore({
-    reducer: {},
+    reducer: { doctor: doctorSlice.reducer },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
 

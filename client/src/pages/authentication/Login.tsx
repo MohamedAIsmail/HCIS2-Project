@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { fetchDoctorsDataThunk } from "../Doctor/doctor-slice";
+import Cookies from "js-cookie";
 
 const Login = () => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+
+    Cookies.remove("authToken");
 
     const [formData, setFormData] = useState({
         email: "",
@@ -21,10 +23,10 @@ const Login = () => {
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
-
         try {
+            // Make login request based on user type
             const response = await axios.post(
-                "http://localhost:8080/login",
+                `http://localhost:8000/api/v1/auth/login`,
                 formData,
                 {
                     headers: {
@@ -32,16 +34,11 @@ const Login = () => {
                     },
                 }
             );
+            Cookies.set("authToken", response.data.token);
 
             if (response.status === 200) {
-                // Handle successful login
-                console.log("Login successful");
-
-                // Update Redux store with user data
-                // dispatch(setUserData(response.data));
-
-                // Redirect to UserPage
-                navigate("/UserPage");
+                // Redirect user to the respective portal based on user type
+                navigate(`/${response.data.user.role}-portal`);
             } else {
                 // Handle unsuccessful login
                 console.error("Login failed");
@@ -61,7 +58,12 @@ const Login = () => {
             </div>
 
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                <form className="space-y-6" action="#" method="POST">
+                <form
+                    className="space-y-6"
+                    action="#"
+                    method="POST"
+                    onSubmit={handleSubmit}
+                >
                     <div>
                         <label
                             htmlFor="email"
@@ -75,8 +77,9 @@ const Login = () => {
                                 name="email"
                                 type="email"
                                 autoComplete="email"
+                                onChange={handleInputChange}
                                 required
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                         </div>
                     </div>
@@ -104,8 +107,9 @@ const Login = () => {
                                 name="password"
                                 type="password"
                                 autoComplete="current-password"
+                                onChange={handleInputChange}
                                 required
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                         </div>
                     </div>

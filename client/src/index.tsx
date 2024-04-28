@@ -2,12 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
-import router from "./router/router";
-import { RouterProvider } from "react-router-dom";
+import Router from "./router/Router";
+import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
-import { store, persistor } from "./state/store";
-import { PersistGate } from "redux-persist/integration/react";
- 
+import store from "./redux/store";
 
 const rootElement = document.getElementById("root");
 if (rootElement) {
@@ -15,9 +13,9 @@ if (rootElement) {
     root.render(
         <React.StrictMode>
             <Provider store={store}>
-                <PersistGate loading={null} persistor={persistor}>
-                    <RouterProvider router={router} />
-                </PersistGate>
+                <BrowserRouter>
+                    <Router />
+                </BrowserRouter>
             </Provider>
         </React.StrictMode>
     );

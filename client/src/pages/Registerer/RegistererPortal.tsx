@@ -1,4 +1,4 @@
-import UserLayout from "../layout/UserLayout";
+import UserLayout from "../../layout/UserLayout";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -9,7 +9,7 @@ import {
     parsedMessage,
     encodeHL7Message,
     ParsedMessage,
-} from "../utils/HL7Encoder";
+} from "../../utils/HL7Encoder";
 
 import axios from "axios";
 

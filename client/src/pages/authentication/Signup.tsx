@@ -2,18 +2,15 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setUserData } from "../state/slices/userSlice";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
-const today = dayjs();
 const yesterday = dayjs().subtract(1, "day");
-const todayStartOfTheDay = today.startOf("day");
+
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -56,7 +53,6 @@ const Signup = () => {
 
                 // Redirect to MainView and pass user data
                 // Update Redux store with user data
-                dispatch(setUserData(response.data));
                 navigate("/UserPage");
             } else {
                 // Handle unsuccessful login
@@ -214,20 +210,10 @@ const Signup = () => {
                             type="submit"
                             className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         >
-                            Sign in
+                            Sign up
                         </button>
                     </div>
                 </form>
-
-                <p className="mt-10 text-center text-sm text-gray-500">
-                    Not a member?{" "}
-                    <a
-                        href="signup"
-                        className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-                    >
-                        Sign Up
-                    </a>
-                </p>
             </div>
         </div>
     );

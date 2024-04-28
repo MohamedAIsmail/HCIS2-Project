@@ -19,15 +19,8 @@ const defaultTheme = createTheme({
   },
 });
 
-interface FormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  phone: string;
-}
 
-export default function SignUp() {
+export default function AddDoctor() {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
