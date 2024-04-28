@@ -3,7 +3,6 @@ import Login from "../pages/authentication/Login";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Signup from "../pages/authentication/Signup";
 import Registerer from "../pages/Registerer/RegistererPortal";
-import AddDoctor from "../pages/Admin/AddDoctor";
 import AdminPage from "../pages/Admin/Admin";
 import Cookies from "js-cookie";
 
@@ -18,7 +17,6 @@ const isAuthenticated = () => {
 
 // ProtectedRoute component to handle private routes
 const ProtectedRoute = ({ element, path }: any) => {
-    console.log(isAuthenticated());
     return isAuthenticated() ? (
         element
     ) : (
@@ -32,10 +30,6 @@ const Router = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/registerpatient" element={<Registerer />} />
-            <Route
-                path="/adddoctor"
-                element={<ProtectedRoute element={<AddDoctor />} />}
-            />
             <Route
                 path="/admin-portal"
                 element={<ProtectedRoute element={<AdminPage />} />}

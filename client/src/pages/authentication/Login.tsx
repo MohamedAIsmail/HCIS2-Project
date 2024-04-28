@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { fetchDoctorsDataThunk } from "../Doctor/doctor-slice";
 import Cookies from "js-cookie";
+import { useDispatch, useSelector } from "react-redux";
+
 
 const Login = () => {
     const navigate = useNavigate();
+    
 
     Cookies.remove("authToken");
 
@@ -38,6 +40,9 @@ const Login = () => {
 
             if (response.status === 200) {
                 // Redirect user to the respective portal based on user type
+
+                
+                
                 navigate(`/${response.data.user.role}-portal`);
             } else {
                 // Handle unsuccessful login
