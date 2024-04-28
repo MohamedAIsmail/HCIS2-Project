@@ -21,6 +21,7 @@ const mountRoutes = require('./routes');
 // Connect the database
 dbConncetion();
 
+// Creating express applicaiton
 const app = express();
 
 // Middlewares
@@ -51,7 +52,7 @@ app.all("*", (req, res, next) => {
 // EXPLAINATION: any error occurs in req - res process is caught here.
 app.use(globalError);
 
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
 app.listen(PORT, () => {
   console.log(`App is Running on Port ${PORT}`);
@@ -66,10 +67,8 @@ process.on("unhandledRejection", (err) => {
     process.exit(1);
   });
 });
-// ################################################################################################################
 
-
-
+// #####################################################TCP CONNECTION PART###########################################################
 
 // function parseData(data) {
 
@@ -88,7 +87,6 @@ process.on("unhandledRejection", (err) => {
 //   return { method, url };
 // }
 
-
 // // Function to send data to Express app
 // async function sendDataToExpress(headers, data) {
 //   try {
@@ -104,8 +102,6 @@ process.on("unhandledRejection", (err) => {
 //     console.error('Error sending data to Express app:', error.message);
 //   }
 // }
-
-// const PORT = 8000;
 
 // // Create a TCP server
 // const server = net.createServer((socket) => {
@@ -155,14 +151,13 @@ process.on("unhandledRejection", (err) => {
 //   console.log(`App is Running on Port ${PORT}`);
 // });
 
-
 // Function to simulate createAppointment
-function createAppointment(headers, data) {
-  // Here you can process both headers and data
-  console.log('Creating appointment...');
-  console.log('Headers:', headers);
-  console.log('Data:', data.toString('utf-8'));
-}
+// function createAppointment(headers, data) {
+//   // Here you can process both headers and data
+//   console.log('Creating appointment...');
+//   console.log('Headers:', headers);
+//   console.log('Data:', data.toString('utf-8'));
+// }
 
 // ##################################################### CONTROLLER PART ###################################################
 const HealthcareProvider = require('./models/healthcareProviderModel');
