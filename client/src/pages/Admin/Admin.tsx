@@ -3,34 +3,30 @@ import { useState, useEffect } from "react";
 import Popup from "reactjs-popup";
 import AddDoctor from "./AddDoctor";
 import { Add } from "@mui/icons-material";
+import { useSelector, useDispatch } from "react-redux";
 
-type UserData = {
-    id: number;
-    name: string;
-    role: string;
-    email: string;
-    password: string;
-};
+import { IDoctor } from "../Doctor/doctor-slice";
+import { IStore } from "../../models/store";
+import {
+    fetchDoctorsDataThunk,
+    deleteDoctorThunk,
+} from "../Doctor/doctor-slice";
+
+import { TAppDispatch } from "../../redux/store";
 
 export default function Admin() {
-    const [data, setData] = useState<UserData[]>([
-        {
-            id: 1,
-            name: "John Doe",
-            role: "Admin",
-            email: "john@example.com",
-            password: "password1",
-        },
-        {
-            id: 2,
-            name: "Jane Smith",
-            role: "Moderator",
-            email: "jane@example.com",
-            password: "password2",
-        },
-    ]);
+    const doctorsData = useSelector((state: IStore) => state.doctors);
+    const [filteredDoctorsData, setFilteredDoctorsData] = useState<IDoctor[]>(
+        []
+    );
+
+    const dispatch = useDispatch<TAppDispatch>();
 
     const [searchTerm, setSearchTerm] = useState<string>("");
+
+    useEffect(() => {
+        dispatch(fetchDoctorsDataThunk());
+    }, [dispatch]);
 
     // Handle search input change
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,9 +34,8 @@ export default function Admin() {
     };
 
     // Handle delete user
-    const handleDelete = (id: number) => {
-        const updatedData = data.filter((item) => item.id !== id);
-        setData(updatedData);
+    const handleDelete = (id: string) => {
+        dispatch(deleteDoctorThunk(id));
     };
 
     // Popup state
@@ -52,12 +47,14 @@ export default function Admin() {
         setIsPopupOpen(true);
     };
 
-    // Filter data based on search term
-    const filteredData = data.filter(
-        (item) =>
-            item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            item.email.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    useEffect(() => {
+        const filteredData = doctorsData.filter(
+            (item) =>
+                item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.email.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        setFilteredDoctorsData(filteredData);
+    }, [doctorsData, searchTerm]);
 
     return (
         <React.Fragment>
@@ -65,15 +62,21 @@ export default function Admin() {
                 <h1 className="text-2xl font-bold">Admin Control Panel</h1>
             </header>
 
-            <div className="overflow-x-auto mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="overflow-x-auto mx-auto px-4 sm:px-6 lg:px-8">
                 <div>
-                    <table className="w-full border-collapse border justify-center">
+                    <table className="w-full border-collapse bordertable-auto">
                         <thead>
                             <tr className="bg-gray-200">
-                                <th className="border px-4 py-2">ID</th>
-                                <th className="border px-4 py-2">Name</th>
-                                <th className="border px-4 py-2">Email</th>
-                                <th className="border px-4 py-2">Password</th>
+                                <th className="border px-4 py-2 min-w-[150px]">
+                                    ID
+                                </th>
+                                <th className="border px-4 py-2 min-w-[150px]">
+                                    Name
+                                </th>
+                                <th className="border px-4 py-2 min-w-[150px]">
+                                    Email
+                                </th>
+
                                 <div className="m-2 flex justify-center">
                                     <input
                                         type="text"
@@ -85,11 +88,11 @@ export default function Admin() {
                                 </div>
                             </tr>
                         </thead>
-                        <tbody className="text-center">
-                            {filteredData.map((item) => (
-                                <tr key={item.id}>
+                        <tbody className="text-center ">
+                            {filteredDoctorsData.map((item) => (
+                                <tr key={item._id}>
                                     <td className="border px-4 py-2">
-                                        {item.id}
+                                        {item._id}
                                     </td>
                                     <td className="border px-4 py-2">
                                         {item.name}
@@ -97,14 +100,12 @@ export default function Admin() {
                                     <td className="border px-4 py-2">
                                         {item.email}
                                     </td>
-                                    <td className="border px-4 py-2">
-                                        {item.password}
-                                    </td>
                                     <td className="border px-4 py-2 ">
                                         <button
                                             className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
                                             onClick={() =>
-                                                handleDelete(item.id)
+                                                item._id &&
+                                                handleDelete(item._id)
                                             }
                                         >
                                             Delete
@@ -119,7 +120,7 @@ export default function Admin() {
                     {/* Popup Trigger Button */}
                     <Popup
                         contentStyle={{
-                            width: "80%",
+                            width: "100%",
                             maxWidth: "24rem",
                             padding: 0,
                             borderRadius: "12px",

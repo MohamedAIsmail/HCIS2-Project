@@ -7,25 +7,32 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { FormEvent, ChangeEvent } from "react";
+import { useDispatch } from "react-redux";
+import { TAppDispatch } from "../../redux/store";
+import { AddDoctorThunk, IDoctor } from "../Doctor/doctor-slice";
 
 interface AddDoctorProps {
     onClose: () => void;
 }
 
 export default function AddDoctor({ onClose }: AddDoctorProps) {
+    const dispatch = useDispatch<TAppDispatch>();
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            firstName: data.get("firstName"),
-            lastName: data.get("lastName"),
-            email: data.get("email"),
-            password: data.get("password"),
-            phone: data.get("phone"),
-        });
+        const doctorData: IDoctor = {
+            name: data.get("firstName") as string,
+            username: data.get("username") as string,
+            email: data.get("email") as string,
+            password: data.get("password") as string,
+            specialization: "General",
+            licenseNumber: "123456",
+            certifications: ["MBBS"],
+        };
+        console.log(doctorData);
+        dispatch(AddDoctorThunk(doctorData));
 
         // Call onClose to close the popup
         onClose();
@@ -33,11 +40,7 @@ export default function AddDoctor({ onClose }: AddDoctorProps) {
 
     return (
         <div className="bg-white shadow-md rounded-xl">
-            <Container
-                component="main"
-                maxWidth="xs"
-                className="border-2 rounded-xl"
-            >
+            <Container component="main" className="border-2 rounded-xl">
                 <CssBaseline />
                 <Box
                     sx={{
@@ -67,7 +70,7 @@ export default function AddDoctor({ onClose }: AddDoctorProps) {
                                     required
                                     fullWidth
                                     id="firstName"
-                                    label="First Name"
+                                    label="Full Name"
                                     autoFocus
                                 />
                             </Grid>
@@ -75,10 +78,10 @@ export default function AddDoctor({ onClose }: AddDoctorProps) {
                                 <TextField
                                     required
                                     fullWidth
-                                    id="lastName"
-                                    label="Last Name"
-                                    name="lastName"
-                                    autoComplete="family-name"
+                                    id="username"
+                                    label="UserName"
+                                    name="username"
+                                    autoComplete="username"
                                 />
                             </Grid>
                             <Grid item xs={12}>

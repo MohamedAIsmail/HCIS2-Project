@@ -16,30 +16,30 @@ interface Schedule {
 }
 
 // Define the interface for the doctor data
-interface Doctor {
-    _id: string;
+export interface IDoctor {
+    _id?: string;
     username: string;
     email: string;
     password: string;
     name: string;
     specialization: string;
     licenseNumber: string;
-    certifications: string[];
-    schedule: Schedule[];
+    certifications?: string[];
+    schedule?: Schedule[];
 }
 
 // Define the initial state
-const initialState: Doctor[] = [];
+const initialState: IDoctor[] = [];
 
 // Create the doctor slice
 const doctorSlice = createSlice({
-    name: "doctor",
+    name: "doctors",
     initialState,
     reducers: {
-        addDoctors(state, action: PayloadAction<Doctor[]>) {
+        addDoctors(state, action: PayloadAction<IDoctor[]>) {
             return action.payload;
         },
-        addDoctor(state, action: PayloadAction<Doctor>) {
+        addDoctor(state, action: PayloadAction<IDoctor>) {
             state.push(action.payload);
         },
         removeDoctor(state, action: PayloadAction<string>) {
@@ -47,7 +47,7 @@ const doctorSlice = createSlice({
         },
         updateDoctor(
             state,
-            action: PayloadAction<{ _id: string; updatedDoctorData: Doctor }>
+            action: PayloadAction<{ _id: string; updatedDoctorData: IDoctor }>
         ) {
             const { _id, updatedDoctorData } = action.payload;
             const doctorToUpdate = state.find((doctor) => doctor._id === _id);
@@ -58,14 +58,33 @@ const doctorSlice = createSlice({
     },
 });
 
+export const deleteDoctorThunk = (doctorId: string) => {
+    return async (dispatch: Dispatch) => {
+        await axios.delete(
+            `http://localhost:8000/api/v1/healthcareProvider/${doctorId}`
+        );
+        dispatch(doctorSlice.actions.removeDoctor(doctorId));
+    };
+};
+
+export const AddDoctorThunk = (doctorData: IDoctor) => {
+    return async (dispatch: Dispatch) => {
+        const response = await axios.post(
+            "http://localhost:8000/api/v1/healthcareProvider",
+            doctorData
+        );
+        const doctor: IDoctor = response.data.healthcareProvider;
+        dispatch(doctorSlice.actions.addDoctor(doctor));
+    };
+};
+
 export const fetchDoctorsDataThunk = () => {
-    console.log("fetchDoctorsDataThunk");
     return async (dispatch: Dispatch) => {
         const response = await axios.get(
             "http://localhost:8000/api/v1/healthcareProvider"
         );
-        console.log(response);
-        const doctors: Doctor[] = response.data.healthcareProviders;
+
+        const doctors: IDoctor[] = response.data.healthcareProviders;
 
         if (!doctors) {
             return;
