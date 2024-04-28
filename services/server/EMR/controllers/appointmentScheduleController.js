@@ -54,7 +54,7 @@ exports.createAppointment = asyncHandler(async (req, res) => {
   const regex = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])$/;
 
   if (!regex.test(appointmentDuration)) {
-    return res.status(404).json({ success: false, msg: `Please enter a valid duration time between 0 and 24 hours` });
+    return res.status(404).json({ success: false, message: `Please enter a valid duration time between 0 and 24 hours` });
   }
 
   const splittedDateTime =  requestedStartDateTimeRange.split('T');
@@ -65,7 +65,7 @@ exports.createAppointment = asyncHandler(async (req, res) => {
   const parsedDate = new Date(appointmentDate);
 
   if (!(!isNaN(parsedDate.getTime()) && /^\d{4}-\d{2}-\d{2}$/.test(appointmentDate))) {
-    return res.status(404).json({ success: false, msg: `Please enter a valid date` });
+    return res.status(404).json({ success: false, message: `Please enter a valid date` });
   }
 
   // Check if the date is already booked
@@ -81,7 +81,7 @@ exports.createAppointment = asyncHandler(async (req, res) => {
   });
 
   if (existingAppointmentDate && existingAppointmentTime) {
-    return res.status(400).json({ success: false, msg: `An appointment already exists for this date and time` });
+    return res.status(400).json({ success: false, message: `An appointment already exists for this date and time` });
   }
 
   const bodyObject = {
@@ -99,7 +99,7 @@ exports.createAppointment = asyncHandler(async (req, res) => {
   let healthcareProvider = await HealthcareProvider.findById(id);
 
   if (!healthcareProvider) {
-    return res.status(404).json({ success: false, msg: `No healthcare provider found for this id: ${id}` });
+    return res.status(404).json({ success: false, message: `No healthcare provider found for this id: ${id}` });
   }
 
   // Push the new appointment data

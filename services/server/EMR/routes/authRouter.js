@@ -1,4 +1,5 @@
 const express = require("express");
+const router = express.Router();
 
 const {
     adminLogout,
@@ -7,8 +8,6 @@ const {
     verifyPassResetCode,
     resetPassword,
 } = require("../controllers/authController");
-
-const router = express.Router();
 
 router.post("/login", login);
 router.post("/forgetPassword", forgetPassword);

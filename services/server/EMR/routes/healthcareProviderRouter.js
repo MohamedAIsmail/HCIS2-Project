@@ -16,12 +16,10 @@ const {
     deleteHealthcareProvider
 } = require("../controllers/healthcareProviderController");
 
-// Route to get all healthcare providers and create a new provider
 router.route("/")
     .get(getHealthcareProviders)
     .post(createHealthcareProviderValidator, createHealthcareProvider);
 
-// Route to get, update, and delete a specific healthcare provider by ID
 router.route("/:id")
     .get(getHealthcareProviderValidator, getHealthcareProvider)
     .put(updateHealthcareProviderValidator, updateHealthcareProvider)

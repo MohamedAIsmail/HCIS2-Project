@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
-// Define a sub-schema for schedule
 const scheduleSchema = new mongoose.Schema(
   {
     appointmentReason: { type: String, enum: ["ROUTINE", "WALKIN", "FOLLOWUP", "EMERGENCY"] }, 
@@ -75,6 +75,12 @@ const healthcareProviderSchema = new mongoose.Schema(
 
   { timestamps: true } 
 );
+
+healthcareProviderSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
+  this.password = await bcrypt.hash(this.password, 12);
+  next();
+});
 
 const HealthcareProvider = mongoose.model('HealthcareProvider', healthcareProviderSchema);
 

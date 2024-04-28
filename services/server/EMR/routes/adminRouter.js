@@ -1,4 +1,5 @@
 const express = require('express');
+const router = express.Router();
 
 const { protect, allowedTo } = require('../controllers/authController');
 
@@ -19,8 +20,6 @@ const {
     deleteAll,
     updateAdminPassword,
 } = require('../controllers/adminController');
-
-const router = express.Router();
 
 // router.use(protect);
 

@@ -5,8 +5,6 @@ const {
     createAppointment,
 } = require("../controllers/appointmentScheduleController");
 
-console.log("router")
-
 router.post('/:id', createAppointment);
 
 module.exports = router;

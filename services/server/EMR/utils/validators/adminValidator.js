@@ -1,5 +1,4 @@
 const { check, body } = require('express-validator');
-const bcrypt = require('bcryptjs');
 
 const validatorMiddleware = require('../../middlewares/validatorMiddleware');
 const { comparePasswords } = require('../../utils/helperFunctions');
@@ -41,8 +40,8 @@ exports.registerAdminValidator = [
 
     check('role')
         .custom((role) => {
-            if (!['admin', 'sub-admin'].includes(role)) {
-                throw new Error('Role must be either admin or sub-admin');
+            if (!(role === 'admin')) {
+                throw new Error('Role must be admin');
             }
             return true;
         }),

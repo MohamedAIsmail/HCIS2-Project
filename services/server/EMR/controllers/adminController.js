@@ -4,27 +4,25 @@ const asyncHandler = require('express-async-handler');
 const Admin = require('../models/adminModel');
 const { createToken } = require('../utils/helperFunctions');
 
-// @desc    Register a new admin
-// @route   POST /api/v1/auth/register
+// @desc    Create a new admin
+// @route   POST /api/v1/admin
 // @access  Public
 exports.registerAdmin = asyncHandler(async (req, res) => {
 
     const admin = await Admin.create({
         name: req.body.name,
         email: req.body.email,
-        // passowrd will be hashed in adminModel.js
-        password: req.body.password,
+        password: req.body.password, // passowrd will be hashed in adminModel.js
         role: req.body.role,
     });
 
-    // 2- Generate Json Web Token
     const token = await createToken(admin._id);
 
     res.status(201).json({ admin, token });
 });
 
 // @desc    Get list of admins
-// @route   GET /api/v1/admins
+// @route   GET /api/v1/admin
 // @access  Private (admin only)
 exports.getAdmins = asyncHandler(async (req, res) => {
     const admins = await Admin.find({});
@@ -32,19 +30,19 @@ exports.getAdmins = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get specific admin by id
-// @route   GET /api/v1/admins/:id
+// @route   GET /api/v1/admin/:id
 // @access  Private (admin only)
 exports.getAdmin = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const admin = await Admin.findById(id);
     if (!admin) {
-        res.status(404).json({ msg: `No admin found for this id: ${id}` });
+        res.status(404).json({ message: `No admin found for this id: ${id}` });
     }
     res.status(200).json({ admin });
 });
 
 // @desc    Update specific admin
-// @route   PUT /api/v1/admins/:id
+// @route   PUT /api/v1/admin/:id
 // @access  Private (admin only)
 exports.updateAdmin = asyncHandler(async (req, res) => {
     const { id } = req.params;
@@ -52,9 +50,9 @@ exports.updateAdmin = asyncHandler(async (req, res) => {
 
     const updatedAdmin = await Admin.findByIdAndUpdate(id, updateFields, { new: true });
     if (!updatedAdmin) {
-        res.status(404).json({ msg: `No admin found for this id: ${id}` });
+        res.status(404).json({ message: `No admin found for this id: ${id}` });
     }
-    res.status(200).json({ admin: updatedAdmin });
+    res.status(200).json({ updatedAdmin });
 });
 
 // @desc   Update Admin Password
@@ -82,13 +80,13 @@ exports.updateAdminPassword = asyncHandler(async (req, res, next) => {
 });
 
 // @desc    Delete specific admin
-// @route   DELETE /api/v1/admins/:id
+// @route   DELETE /api/v1/admin/:id
 // @access  Private (admin only)
 exports.deleteAdmin = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const deletedAdmin = await Admin.findByIdAndDelete(id);
     if (!deletedAdmin) {
-        res.status(404).json({ msg: `No admin found for this id: ${id}` });
+        res.status(404).json({ message: `No admin found for this id: ${id}` });
     }
     res.status(204).send();
 });
