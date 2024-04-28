@@ -1,33 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const HealthcareProvider = require('../models/healthcareProviderModel');
-const net = require('net');
-
-const TCP_HOST = '127.0.0.1'; // Replace with the TCP server's IP address or hostname
-const TCP_PORT = 8000; // Make sure it matches the TCP server's port
-
-// Function to send data over TCP
-function sendDataOverTCP(data) {
-  const client = new net.Socket();
-
-  client.connect(TCP_PORT, TCP_HOST, () => {
-    console.log('Connected to TCP server');
-    // client.write(data);
-    console.log("Magdy")
-  });
-
-  client.on('close', () => {
-    console.log('Connection to TCP server closed');
-  });
-
-  client.on('error', (error) => {
-    console.error('Error connecting to TCP server:', error.message);
-  });
-}
-
 
 exports.createAppointment = asyncHandler(async (req, res) => {
-
-  console.log("createAppointment")
 
   const { id } = req.params;
 
@@ -107,12 +81,6 @@ exports.createAppointment = asyncHandler(async (req, res) => {
 
   // Save the updated document
   healthcareProvider = await healthcareProvider.save();
-
-  // Convert appointment data to JSON string
-  const jsonData = JSON.stringify(bodyObject);
-
-  // Send appointment data over TCP
-  sendDataOverTCP(jsonData);
 
   res.status(200).json({ success: true, healthcareProvider });
 });

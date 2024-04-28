@@ -110,7 +110,7 @@ async function parseHL7Message(message) {
                 fields: segmentFields
             };
         });
-        console.log(parsedMessage);
+
         resolve(parsedMessage);
     });
 };
