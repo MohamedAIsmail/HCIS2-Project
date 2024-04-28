@@ -3,9 +3,6 @@ const validatorMiddleware = require('../../middlewares/validatorMiddleware');
 const HealthcareProvider = require('../../models/healthcareProviderModel');
 
 exports.createHealthcareProviderValidator = [
-    check('username')
-        .notEmpty()
-        .withMessage('Username is required'),
         
     check('email')
         .notEmpty()

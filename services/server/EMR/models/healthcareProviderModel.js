@@ -27,11 +27,6 @@ const scheduleSchema = new mongoose.Schema(
 
 const healthcareProviderSchema = new mongoose.Schema(
   {
-    username: { 
-      type: String, 
-      required: [true, "username is required"] 
-    },
-
     email: {
       type: String,
       required: [true, 'Email is required'],
