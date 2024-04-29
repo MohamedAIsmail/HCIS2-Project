@@ -6,7 +6,6 @@ const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
-const axios = require('axios');
 const net = require('net');
 
 // Project Files
@@ -14,6 +13,7 @@ dotenv.config({ path: 'config.env' });
 const ApiError = require('./utils/apiError');
 const dbConncetion = require('./config/database');
 const globalError = require('./middlewares/errorMiddleware');
+const { createAppointment, registerPatient } = require('./HL7scenarios');
 
 // REQUIRING ROUTES
 const mountRoutes = require('./routes');
@@ -60,7 +60,6 @@ app.listen(PORT, () => {
 });
 
 // ######################################### TCP SERVER #########################################
-const { createAppointment, registerPatient } = require('./HL7scenarios');
 
 const tcpServer = net.createServer(async (socket) => {
 
