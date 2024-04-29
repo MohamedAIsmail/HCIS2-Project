@@ -2,7 +2,6 @@ const PatientRegister = require('./models/patientRegisterModel');
 const HealthcareProvider = require('./models/healthcareProviderModel');
 
 // ############################################## Create Appointment Scenario ########################################################
-
 exports.createAppointment = (parsedData, id) => {
     return new Promise(async (resolve, reject) => {
         try {
