@@ -49,7 +49,7 @@ app.all("*", (req, res, next) => {
 });
 
 // GLOBAL ERROR HANDLING MIDDLEWARE FOR EXPRESS
-// EXPLAINATION: any error occurs in req - res process is caught here.
+// EXPLAINATION: any error occurs in req - res process is caught here
 app.use(globalError);
 
 const PORT = process.env.PORT || 8000;
@@ -60,8 +60,8 @@ app.listen(PORT, () => {
 });
 
 // ######################################### TCP SERVER #########################################
+const { createAppointment, registerPatient } = require('./HL7scenarios');
 
-// Creating a TCP server
 const tcpServer = net.createServer(async (socket) => {
 
   console.log('TCP Server: Client connected'); 
@@ -79,12 +79,14 @@ const tcpServer = net.createServer(async (socket) => {
     if (scenario === "createAppointment") {
       const id = parsedData.id;
       delete parsedData['id'];
-      response = await axios.post(`http://localhost:8000/api/v1/appointment/${id}`, parsedData);
+
+      response = await createAppointment(parsedData, id);
+      console.log(response)
     } else {
-      response = await axios.post(`http://localhost:8000/api/v1/registerPatient`, parsedData);
+      response = await registerPatient(parsedData);
     }
 
-    socket.write(JSON.stringify(response.data));
+    socket.write(JSON.stringify(response));
   });
   
   socket.on('end', async () => {
