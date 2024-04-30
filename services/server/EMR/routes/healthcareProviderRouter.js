@@ -5,22 +5,21 @@ const {
     createHealthcareProviderValidator,
     getHealthcareProviderValidator,
     updateHealthcareProviderValidator,
-    deleteHealthcareProviderValidator
-} = require('../utils/validators/healthcareProviderValidator');
+    deleteHealthcareProviderValidator,
+} = require("../utils/validators/healthcareProviderValidator");
 
 const {
     createHealthcareProvider,
     getHealthcareProviders,
     getHealthcareProvider,
     updateHealthcareProvider,
-    deleteHealthcareProvider
+    deleteHealthcareProvider,
 } = require("../controllers/healthcareProviderController");
 
-router.route("/")
-    .get(getHealthcareProviders)
-    .post(createHealthcareProviderValidator, createHealthcareProvider);
+router.route("/").get(getHealthcareProviders).post(createHealthcareProvider);
 
-router.route("/:id")
+router
+    .route("/:id")
     .get(getHealthcareProviderValidator, getHealthcareProvider)
     .put(updateHealthcareProviderValidator, updateHealthcareProvider)
     .delete(deleteHealthcareProviderValidator, deleteHealthcareProvider);
