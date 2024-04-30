@@ -1,5 +1,32 @@
 const asyncHandler = require("express-async-handler");
 const PatientAccount = require("../models/patientAccountModel");
+const HealthcareProvider = require("../models/healthcareProviderModel");
+
+// @desc    Book appointment
+// @route   PUT /api/v1/patient/:patientId/:doctorId/:appointmentId
+// @access  Patient only
+exports.bookAppointment = asyncHandler(async (req, res) => {
+    const { patientId, doctorId, appointmentId } = req.params;
+    const { booked, patientID } = req.body;
+
+    const patient = await PatientAccount.findById(patientId);
+    if (!patient) {
+        return res.status(404).json({ success: false, message: `No patient found` });
+    };
+
+    const doctor = await HealthcareProvider.findOneAndUpdate(
+        { _id: doctorId, 'schedule._id': appointmentId },
+        { $set: { 'schedule.$.booked': booked, 'schedule.$.patientID': patientID }},
+        { new: true, runValidators: true }
+    );
+
+    if (!doctor) {
+        return res.status(404).json({ success: false, message: `No doctor or appointment found` });
+    };
+
+    res.status(200).json({ doctor });
+});
+
 
 // @desc    Get list of patients
 // @route   GET /api/v1/patient

@@ -13,7 +13,8 @@ const {
     getPatients,
     getPatient,
     updatePatient,
-    deletePatient
+    deletePatient,
+    bookAppointment
 } = require("../controllers/patientAccountController");
 
 router.route("/")
@@ -24,5 +25,7 @@ router.route("/:id")
     .get(getPatientValidator, getPatient)
     .put(updatePatientValidator, updatePatient)
     .delete(deletePatientValidator, deletePatient);
+
+router.route("/:patientId/:doctorId/:appointmentId").put(bookAppointment)
 
 module.exports = router;

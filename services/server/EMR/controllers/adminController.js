@@ -37,7 +37,7 @@ exports.getAdmin = asyncHandler(async (req, res) => {
     const admin = await Admin.findById(id);
     if (!admin) {
         res.status(404).json({ message: `No admin found for this id: ${id}` });
-    }
+    };
     res.status(200).json({ admin });
 });
 

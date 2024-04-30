@@ -19,7 +19,11 @@ const scheduleSchema = new mongoose.Schema(
 
     placerContactPerson: { type: String }, 
 
-    PlacerContactPhoneNumber: { type: String }
+    PlacerContactPhoneNumber: { type: String },
+
+    booked: { type: Boolean, default: false },
+
+    patientID: {} 
 
   }, 
   { timestamps: true }

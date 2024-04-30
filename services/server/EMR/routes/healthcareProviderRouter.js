@@ -13,7 +13,8 @@ const {
     getHealthcareProviders,
     getHealthcareProvider,
     updateHealthcareProvider,
-    deleteHealthcareProvider
+    deleteHealthcareProvider,
+    getBookedPatients
 } = require("../controllers/healthcareProviderController");
 
 router.route("/")
@@ -21,6 +22,7 @@ router.route("/")
     .post(createHealthcareProviderValidator, createHealthcareProvider);
 
 router.route("/:id")
+    .get(getBookedPatients)
     .get(getHealthcareProviderValidator, getHealthcareProvider)
     .put(updateHealthcareProviderValidator, updateHealthcareProvider)
     .delete(deleteHealthcareProviderValidator, deleteHealthcareProvider);

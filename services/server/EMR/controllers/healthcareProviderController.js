@@ -1,5 +1,26 @@
 const asyncHandler = require("express-async-handler");
 const HealthcareProvider = require("../models/healthcareProviderModel");
+const PatientAccount = require("../models/patientAccountModel");
+
+// @desc    Get all patients who booked appointments with a specific healthcare provider
+// @route   GET /api/v1/healthcareProvider/:doctorId
+// @access  Healthcare provider only
+exports.getBookedPatients = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+
+    const doctor = await HealthcareProvider.findById(id);
+    if (!doctor) {
+        return res.status(404).json({ success: false, message: `No doctor found` });
+    };
+
+    const bookedAppointments = doctor.schedule.filter(appointment => appointment.booked === true);
+
+    const bookedPatientIds = bookedAppointments.map(appointment => appointment.patientID);
+
+    const bookedPatients = await PatientAccount.find({ _id: { $in: bookedPatientIds } });
+
+    res.status(200).json(bookedPatients);
+});
 
 // @desc    Get list of healthcare providers
 // @route   GET /api/v1/healthcareProvider
