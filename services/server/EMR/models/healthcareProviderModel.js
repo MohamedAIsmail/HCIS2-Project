@@ -46,7 +46,7 @@ const healthcareProviderSchema = new mongoose.Schema(
 
     role: {
       type: String,
-      default: "healthcareProvider" 
+      default: "doctor" 
     },
 
     name: {

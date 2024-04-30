@@ -5,8 +5,8 @@ const {
     createHealthcareProviderValidator,
     getHealthcareProviderValidator,
     updateHealthcareProviderValidator,
-    deleteHealthcareProviderValidator
-} = require('../utils/validators/healthcareProviderValidator');
+    deleteHealthcareProviderValidator,
+} = require("../utils/validators/healthcareProviderValidator");
 
 const {
     createHealthcareProvider,
@@ -17,9 +17,7 @@ const {
     getBookedPatients
 } = require("../controllers/healthcareProviderController");
 
-router.route("/")
-    .get(getHealthcareProviders)
-    .post(createHealthcareProviderValidator, createHealthcareProvider);
+router.route("/").get(getHealthcareProviders).post(createHealthcareProvider);
 
 router.route("/:id")
     .get(getBookedPatients)
