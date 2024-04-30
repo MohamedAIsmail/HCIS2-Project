@@ -60,41 +60,50 @@ app.listen(PORT, () => {
 });
 
 // ######################################### TCP SERVER #########################################
+const http = require('http');
+const socketIo = require('socket.io');
+const server = http.createServer(app);
 
-const tcpServer = net.createServer(async (socket) => {
-    console.log("TCP Server: Client connected");
-    let receivedData = "";
-
-    socket.on("data", async (data) => {
-        receivedData += data.toString();
-        const parsedData = JSON.parse(receivedData);
-        const scenario = parsedData.scenario;
-        delete parsedData["scenario"];
-
-        let response;
-
-        if (scenario === "createAppointment") {
-            const id = parsedData.id;
-            delete parsedData["id"];
-
-            response = await createAppointment(parsedData, id);
-            console.log(response);
-        } else {
-            response = await registerPatient(parsedData);
-        }
-
-        socket.write(JSON.stringify(response));
-    });
-
-    socket.on("end", async () => {
-        console.log("inside end socket");
-    });
-
-    socket.on("close", () => {
-        console.log("TCP Server: Client disconnected");
-    });
+// Setup CORS
+const io = socketIo(server, {
+  cors: {
+    origin: "http://localhost:3000",  // This should match the URL of your client app
+    methods: ["GET", "POST"],
+    allowedHeaders: ["my-custom-header"],
+    credentials: true
+  }
 });
 
-tcpServer.listen(4000, () => {
-    console.log("TCP Server is running on port 4000");
+io.on('connection', (socket) => {
+  console.log('New client connected');
+  
+  socket.on('sendData', async (data) => {
+
+    const parsedData = JSON.parse(data);
+    // console.log(parsedData);
+    const scenario = parsedData.scenario;
+    delete parsedData["scenario"];
+
+    let response;
+
+    if (scenario === "createAppointment") {
+        const id = parsedData.id;
+        delete parsedData["id"];
+        response = await createAppointment(parsedData, id);
+    } else {
+        response = await registerPatient(parsedData);
+        console.log(response)
+
+    }
+
+    socket.write(JSON.stringify(response));
+    });
+
+  socket.on('disconnect', () => {
+    console.log('Client disconnected');
+  });
+});
+
+server.listen(8080, () => {
+  console.log('Listening on port 8080');
 });

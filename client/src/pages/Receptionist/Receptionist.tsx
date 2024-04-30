@@ -9,6 +9,7 @@ import {
     encodeHL7Message,
     ParsedMessage,
 } from "../../utils/HL7Encoder";
+import io from 'socket.io-client';
 
 import axios from "axios";
 import Sidebar from "../../layout/Sidebar/Sidebar";
@@ -34,6 +35,7 @@ const Receptionist = () => {
             "Date/Time of Birth": formattedDate,
         });
     };
+    const [response, setResponse] = useState('');
 
     // Function to handle form submission
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -55,25 +57,45 @@ const Receptionist = () => {
                 }
             });
         });
-
-        // Encode the mapped data
-        const encodedData = { hl7Message: encodeHL7Message(mappedData) };
-
-        // Send formData to server using fetch or axios POST request
-        const response = await axios.post(
-            "http://localhost:8000/api/v1/registerPatient/",
-            encodedData,
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                },
+        encodeHL7Message(mappedData)
+        const socket = io('http://localhost:8080/', {
+            withCredentials: true,
+            extraHeaders: {
+                "my-custom-header": "abcd"
             }
-        );
-        if (response.status === 200) {
-            console.log("Patient Data Added Successfully");
-        } else {
-            console.error("Patient Data Addition Failed");
-        }
+        });
+
+        socket.on('connect', () => {
+            console.log('Connected to server');
+
+            // Send data to the server
+            const data = JSON.stringify({
+                scenario: "registerPatient",
+                hl7Message: encodeHL7Message(mappedData)
+            });
+
+            socket.emit('sendData', data);
+            window.location.reload(); 
+        });
+
+        // socket.on('dataResponse', (data) => {
+        //     console.log('Data received:', data);
+        //     setResponse(data);
+        // });
+
+        socket.on('error', (errorMessage) => {
+            console.error('Error from server:', errorMessage);
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Disconnected from server');
+        });
+
+        // Cleanup on component unmount
+        return () => {
+            socket.disconnect();
+        };
+
     };
 
     return (
