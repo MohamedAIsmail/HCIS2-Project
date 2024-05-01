@@ -12,6 +12,7 @@ const Navbar = () => {
                 <div className="text-xl font-bold text-white ml-8">
                     {userType.charAt(1).toUpperCase() +
                         userType.slice(2).toUpperCase()}
+                        
                 </div>
             </div>
         </div>

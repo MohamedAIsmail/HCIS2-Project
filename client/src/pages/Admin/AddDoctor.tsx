@@ -31,7 +31,6 @@ export default function AddDoctor({ onClose }: AddDoctorProps) {
             licenseNumber: "123456",
             certifications: ["MBBS"],
         };
-        console.log(doctorData);
         dispatch(AddDoctorThunk(doctorData));
 
         // Call onClose to close the popup

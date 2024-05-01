@@ -44,6 +44,9 @@ const Login = () => {
                     navigate(`/doctor-portal/${response.data.user._id}`);
                 } else if (response.data.user.role === 'patient') {
                     navigate(`/patient-portal/${response.data.user._id}`);
+                }
+                else if (response.data.user.role === 'receptionist') {
+                    navigate(`/receptionist`);    
                 } else {
                     navigate(`/${response.data.user.role}-portal`);
                 } 
