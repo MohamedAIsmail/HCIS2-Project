@@ -8,10 +8,4 @@ export const PatientSidebarData = [
         icon: <AiIcons.AiFillHome />,
         cName: "nav-text",
     },
-    {
-        title: "Form",
-        path: "/form",
-        icon: <AiIcons.AiOutlineForm />,
-        cName: "nav-text",
-    },
 ];

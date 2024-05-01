@@ -9,7 +9,7 @@ import {
     encodeHL7Message,
     ParsedMessage,
 } from "../../utils/HL7Encoder";
-import io from 'socket.io-client';
+import io from "socket.io-client";
 
 import axios from "axios";
 import Sidebar from "../../layout/Sidebar/Sidebar";
@@ -35,7 +35,7 @@ const Receptionist = () => {
             "Date/Time of Birth": formattedDate,
         });
     };
-    const [response, setResponse] = useState('');
+    const [response, setResponse] = useState("");
 
     // Function to handle form submission
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -57,47 +57,44 @@ const Receptionist = () => {
                 }
             });
         });
-        encodeHL7Message(mappedData)
-        const socket = io('http://localhost:8080/', {
+        encodeHL7Message(mappedData);
+        const socket = io("http://localhost:8080/", {
             withCredentials: true,
             extraHeaders: {
-                "my-custom-header": "abcd"
-            }
+                "my-custom-header": "abcd",
+            },
         });
 
-        socket.on('connect', () => {
-            console.log('Connected to server');
+        socket.on("connect", () => {
+            console.log("Connected to server");
 
             // Send data to the server
             const data = JSON.stringify({
                 scenario: "registerPatient",
-                hl7Message: encodeHL7Message(mappedData)
+                hl7Message: encodeHL7Message(mappedData),
             });
 
-            socket.emit('sendData', data);
-            window.location.reload(); 
+            socket.emit("sendData", data);
+            window.location.reload();
         });
 
-
-
-        socket.on('error', (errorMessage) => {
-            console.error('Error from server:', errorMessage);
+        socket.on("error", (errorMessage) => {
+            console.error("Error from server:", errorMessage);
         });
 
-        socket.on('disconnect', () => {
-            console.log('Disconnected from server');
+        socket.on("disconnect", () => {
+            console.log("Disconnected from server");
         });
 
         // Cleanup on component unmount
         return () => {
             socket.disconnect();
         };
-
     };
 
     return (
         <div className="h-screen">
-            <div className="">
+            <div className="h-[calc(7%)]">
                 <Navbar />
             </div>
             <div className="flex h-5/6">

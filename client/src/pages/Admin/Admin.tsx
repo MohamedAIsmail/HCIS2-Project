@@ -60,10 +60,10 @@ export default function Admin() {
 
     return (
         <div className="h-screen">
-            <div className="">
+            <div className="h-[calc(7%)]">
                 <Navbar />
             </div>
-            <div className="flex h-5/6">
+            <div className="flex h-[calc(93%)]">
                 <div className="w-1/6">
                     <Sidebar />
                 </div>

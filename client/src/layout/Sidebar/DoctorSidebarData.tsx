@@ -4,14 +4,8 @@ import * as AiIcons from "react-icons/ai";
 export const DoctorSidebarData = [
     {
         title: "Home",
-        path: "/",
+        path: "/doctor-portal",
         icon: <AiIcons.AiFillHome />,
-        cName: "nav-text",
-    },
-    {
-        title: "Form",
-        path: "/form",
-        icon: <AiIcons.AiOutlineForm />,
         cName: "nav-text",
     },
 ];
