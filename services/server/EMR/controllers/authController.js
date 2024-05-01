@@ -8,6 +8,7 @@ const ApiError = require("../utils/apiError");
 const Admin = require("../models/adminModel");
 const Patient = require("../models/patientAccountModel");
 const HealthcareProvider = require("../models/healthcareProviderModel");
+const Receptionist = require("../models/receptionistModel");
 
 // @desc   Login
 // @route  POST /api/v1/auth/login
@@ -18,6 +19,9 @@ exports.login = asyncHandler(async (req, res, next) => {
         user = await Patient.findOne({ email: req.body.email });
         if (!user) {
             user = await HealthcareProvider.findOne({ email: req.body.email });
+            if(!user) {
+                user = await Receptionist.findOne({ email: req.body.email });
+            }
         }
     }
 
