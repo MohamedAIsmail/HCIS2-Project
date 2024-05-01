@@ -21,9 +21,9 @@ exports.createAppointment = asyncHandler(async (req, res) => {
   // Validating appointmentDuration
   const regex = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])$/;
 
-  if (!regex.test(appointmentDuration)) {
-    return res.status(404).json({ success: false, message: `Please enter a valid duration time between 0 and 24 hours` });
-  }
+  // if (!regex.test(appointmentDuration)) {
+  //   return res.status(404).json({ success: false, message: `Please enter a valid duration time between 0 and 24 hours` });
+  // }
 
   const splittedDateTime =  requestedStartDateTimeRange.split('T');
   const appointmentDate = splittedDateTime[0];
@@ -32,9 +32,9 @@ exports.createAppointment = asyncHandler(async (req, res) => {
   // Validating the requestedStartDateTimeRange
   const parsedDate = new Date(appointmentDate);
 
-  if (!(!isNaN(parsedDate.getTime()) && /^\d{4}-\d{2}-\d{2}$/.test(appointmentDate))) {
-    return res.status(404).json({ success: false, message: `Please enter a valid date` });
-  }
+  // if (!(!isNaN(parsedDate.getTime()) && /^\d{4}-\d{2}-\d{2}$/.test(appointmentDate))) {
+  //   return res.status(404).json({ success: false, message: `Please enter a valid date` });
+  // }
 
   // Check if the date is already booked
   const existingAppointmentDate = await HealthcareProvider.findOne({
@@ -48,9 +48,9 @@ exports.createAppointment = asyncHandler(async (req, res) => {
     'schedule.appointmentTime': appointmentTime
   });
 
-  if (existingAppointmentDate && existingAppointmentTime) {
-    return res.status(400).json({ success: false, message: `An appointment already exists for this date and time` });
-  }
+  // if (existingAppointmentDate && existingAppointmentTime) {
+  //   return res.status(400).json({ success: false, message: `An appointment already exists for this date and time` });
+  // }
 
   const bodyObject = {
       "appointmentReason": appointmentDataARQ['Appointment Reason'],
@@ -66,9 +66,9 @@ exports.createAppointment = asyncHandler(async (req, res) => {
 
   let healthcareProvider = await HealthcareProvider.findById(id);
 
-  if (!healthcareProvider) {
-    return res.status(404).json({ success: false, message: `No healthcare provider found for this id: ${id}` });
-  }
+  // if (!healthcareProvider) {
+  //   return res.status(404).json({ success: false, message: `No healthcare provider found for this id: ${id}` });
+  // }
 
   healthcareProvider.schedule.push(bodyObject);
 

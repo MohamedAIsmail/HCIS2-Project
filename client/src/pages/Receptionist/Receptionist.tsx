@@ -78,10 +78,7 @@ const Receptionist = () => {
             window.location.reload(); 
         });
 
-        // socket.on('dataResponse', (data) => {
-        //     console.log('Data received:', data);
-        //     setResponse(data);
-        // });
+
 
         socket.on('error', (errorMessage) => {
             console.error('Error from server:', errorMessage);

@@ -13,5 +13,4 @@ const mountRoutes = (app) => {
     app.use('/api/v1/registerPatient', registerPatient);
     app.use('/api/v1/appointment', createAppointmentRoute);
 };
-
 module.exports = mountRoutes;

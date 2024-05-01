@@ -14,7 +14,6 @@ const HealthcareProvider = require("../models/healthcareProviderModel");
 // @access Public
 exports.login = asyncHandler(async (req, res, next) => {
     let user = await Admin.findOne({ email: req.body.email });
-
     if (!user) {
         user = await Patient.findOne({ email: req.body.email });
         if (!user) {

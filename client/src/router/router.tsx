@@ -36,7 +36,8 @@ const Router = () => {
                 element={<ProtectedRoute element={<AdminPage />} />}
             />
             <Route
-                path="/doctor-portal"
+
+                path="/doctor-portal/:doctorId"
                 element={<ProtectedRoute element={<DoctorPage />} />}
             />
 

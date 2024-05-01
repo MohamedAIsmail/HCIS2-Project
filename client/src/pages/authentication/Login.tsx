@@ -33,15 +33,19 @@ const Login = () => {
                         "Content-Type": "application/json",
                     },
                 }
+
             );
+
             Cookies.set("authToken", response.data.token);
 
             if (response.status === 200) {
-                // Redirect user to the respective portal based on user type
-
-                navigate(`/${response.data.user.role}-portal`);
+                // Assuming doctor's ID and role are part of the response for this example
+                if (response.data.user.role === 'doctor') {
+                    navigate(`/doctor-portal/${response.data.user._id}`);
+                } else {
+                    navigate(`/${response.data.user.role}-portal`);
+                }
             } else {
-                // Handle unsuccessful login
                 console.error("Login failed");
             }
         } catch (error) {
