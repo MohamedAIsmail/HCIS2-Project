@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     const patientId = window.location.pathname.split("/")[2];
-    const doctorId = window.location.pathname.split("/")[3]
+    const doctorId = window.location.pathname.split("/")[3];
 
     // Function to fetch and display appointments for a specific doctor
     const fetchAppointments = async () => {

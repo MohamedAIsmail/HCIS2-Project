@@ -43,10 +43,7 @@ const Login = () => {
                 if (response.data.user.role === 'doctor') {
                     navigate(`/doctor-portal/${response.data.user._id}`);
                 } else if (response.data.user.role === 'patient') {
-                    console.log(response.data.user._id)
-                    const res = await axios.get(`http://localhost:8000/patientPortal/${response.data.user._id}`);
-                    setHtmlResponse(res.data);
-                    console.log(res.data)
+                    navigate(`/patient-portal/${response.data.user._id}`);
                 } else {
                     navigate(`/${response.data.user.role}-portal`);
                 } 

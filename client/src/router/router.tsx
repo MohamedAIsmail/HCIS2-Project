@@ -6,6 +6,9 @@ import Receptionist from "../pages/Receptionist/Receptionist";
 import AdminPage from "../pages/Admin/Admin";
 import Cookies from "js-cookie";
 import DoctorPage from "../pages/Doctor/Doctor";
+import PatientPage from "../pages/Patient/Patient.jsx";
+import AppointmentPage from "../pages/Appointment/Appointment.jsx";
+
 
 // Function to check if user is authenticated
 const isAuthenticated = () => {
@@ -36,9 +39,18 @@ const Router = () => {
                 element={<ProtectedRoute element={<AdminPage />} />}
             />
             <Route
-
                 path="/doctor-portal/:doctorId"
                 element={<ProtectedRoute element={<DoctorPage />} />}
+            />
+
+            <Route
+                path="/patient-portal/:patientId"
+                element={<ProtectedRoute element={<PatientPage />} />}
+            />
+
+            <Route
+                path="/appointments/:patientId/:doctorId"
+                element={<ProtectedRoute element={<AppointmentPage />} />}
             />
 
             <Route path="/" element={<Login />} />
