@@ -75,12 +75,12 @@ export default function AddAppointment({ onClose }: AddAppointmentProps) {
                     "Appointment Type": "",
                     "Appointment Duration": data.get("appointmentDuration") as string,
                     "Appointment Duration Units": data.get("appointmentTime") as string,
-                    "Requested Start Date/Time Range": data.get("requestedStartDateTimeRange") as string,
+                    "Requested Start Date/Time Range": data.get("requestedStartDate") as string,
                     "Priority-ARQ": data.get("priorityARQ") as "Stat" | "ASAP" | "Routine" | "Timing critical",
-                    "Repeating Interval":  data.get("repeatingInterval") as string,
-                    "Repeating Interval Duration": data.get("repeatingIntervalDuration") as string,
-                    "Placer Contact Person": data.get("placerContactPerson") as string,
-                    "Placer Contact Phone Number": data.get("placerContactPhoneNumber") as string,
+                    "Repeating Interval":  " ",
+                    "Repeating Interval Duration": " ",
+                    "Placer Contact Person": " ",
+                    "Placer Contact Phone Number": " ",
                     "Placer Contact Address": "",
                     "Placer Contact Location": "",
                     "Entered By Person": "",
@@ -197,11 +197,11 @@ export default function AddAppointment({ onClose }: AddAppointmentProps) {
                                     required
                                     fullWidth
                                     id="requestedStartDateTimeRange"
-                                    label="Requested Start Date/Time Range"
-                                    name="requestedStartDateTimeRange"
+                                    label="Requested Start Date"
+                                    name="requestedStartDate"
                                 />
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={12}>
                                 <TextField
                                     select
                                     required
@@ -218,43 +218,7 @@ export default function AddAppointment({ onClose }: AddAppointmentProps) {
                                     ))}
                                 </TextField>
                             </Grid>
-                            <Grid item xs={6}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="repeatingInterval"
-                                    label="Repeating Interval"
-                                    name="repeatingInterval"
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="repeatingIntervalDuration"
-                                    label="Repeating Interval Duration"
-                                    name="repeatingIntervalDuration"
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="placerContactPerson"
-                                    label="Placer Contact Person"
-                                    name="placerContactPerson"
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="placerContactPhoneNumber"
-                                    label="Placer Contact Phone Number"
-                                    name="placerContactPhoneNumber"
-                                    type="tel"
-                                />
-                            </Grid>
+
                         </Grid>
                         <Button
                             type="submit"

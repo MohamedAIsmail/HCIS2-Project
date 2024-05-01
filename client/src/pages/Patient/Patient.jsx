@@ -27,7 +27,7 @@ const Patient = () => {
             }
         }
         fetchDoctors();
-    }, []);
+    }, [Doctors]);
 
     const handleClick = (doctorId) => {
         navigate(`/appointments/${patientId}/${doctorId}`);

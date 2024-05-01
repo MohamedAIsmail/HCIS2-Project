@@ -21,9 +21,7 @@ exports.createAppointment = asyncHandler(async (req, res) => {
   // Validating appointmentDuration
   const regex = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])$/;
 
-  // if (!regex.test(appointmentDuration)) {
-  //   return res.status(404).json({ success: false, message: `Please enter a valid duration time between 0 and 24 hours` });
-  // }
+
 
   const splittedDateTime =  requestedStartDateTimeRange.split('T');
   const appointmentDate = splittedDateTime[0];
