@@ -7,6 +7,6 @@ const {
 } = require('../controllers/createAppointmentController');
 
 router.route('/:id').post(createAppointment)
-router.route('/:id').get(getAppointment);
+router.route('/:patientId/:doctorId').get(getAppointment);
 
 module.exports = router;

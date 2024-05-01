@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
@@ -42,9 +42,14 @@ const Login = () => {
                 // Assuming doctor's ID and role are part of the response for this example
                 if (response.data.user.role === 'doctor') {
                     navigate(`/doctor-portal/${response.data.user._id}`);
+                } else if (response.data.user.role === 'patient') {
+                    console.log(response.data.user._id)
+                    const res = await axios.get(`http://localhost:8000/patientPortal/${response.data.user._id}`);
+                    setHtmlResponse(res.data);
+                    console.log(res.data)
                 } else {
                     navigate(`/${response.data.user.role}-portal`);
-                }
+                } 
             } else {
                 console.error("Login failed");
             }
@@ -52,7 +57,10 @@ const Login = () => {
             alert("Invalid email or password");
             console.error("Error during login:", error);
         }
+        
     };
+
+    const [htmlResponse, setHtmlResponse] = useState("");
 
     return (
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">

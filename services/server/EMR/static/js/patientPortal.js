@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const patientId = window.location.pathname.split("/")[2];
     // Function to fetch and display doctors
     const fetchDoctors = async () => {
         try {
@@ -28,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
             bookButtons.forEach(button => {
                 button.addEventListener("click", async () => {
                     const doctorId = button.getAttribute("data-id");
-                    window.location.href = `/appointments/${doctorId}`;
+                    window.location.href = `/appointments/${patientId}/${doctorId}`;
                 });
             });
         } catch (error) {

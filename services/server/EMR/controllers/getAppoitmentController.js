@@ -3,10 +3,10 @@ const HealthcareProvider = require('../models/healthcareProviderModel');
 
 
 exports.getAppointment = asyncHandler(async (req, res) => {
-    const { id } = req.params;
+    const { patientId, doctorId } = req.params;
 
     try {
-        const healthcareProvider = await HealthcareProvider.findById(id);
+        const healthcareProvider = await HealthcareProvider.findById(doctorId);
         if (!healthcareProvider) {
             return res.status(404).json({ success: false, message: 'No healthcare provider found for this ID' });
         }

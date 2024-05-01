@@ -41,12 +41,14 @@ app.get("/favicon.ico", (req, res) => {
 });
 
 // Route for the patient portal page
-app.get("/patient-portal", (req, res) => {
+app.get("/patientPortal/:patientId", (req, res) => {
+  const patientId = req.params.patientId;
+  console.log(patientId)
   res.sendFile(path.join(__dirname, 'templates', 'patientPortal.html'));
 });
 
 // Route for the appointments page
-app.get("/appointments/:doctorId", (req, res) => {
+app.get("/appointments/:patientId/:doctorId", (req, res) => {
   res.sendFile(__dirname + "/templates/appointments.html");
 });
 
