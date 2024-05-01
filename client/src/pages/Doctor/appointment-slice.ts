@@ -62,12 +62,15 @@ export const addHL7AppointmentThunk = (appointmentData: string, doctorId: string
 export const fetchHL7AppointmentsDataThunk = (doctorId: string) => {
     return async (dispatch: Dispatch) => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/v1/appointment/${doctorId}`);
+            const response = await axios.get(`http://localhost:8000/api/v1/healthcareProvider`);
             const data=response.data
-            if (data) {
+            const healthcareProviders = response.data.healthcareProviders;
 
-             
-                    dispatch(appointmentSlice.actions.addHL7Appointments(data));
+            // Find the doctor object with the given ID
+            const doctor = healthcareProviders.find((provider: { _id: string; role: string; }) => provider._id === doctorId && provider.role === 'doctor');
+            if (doctor) {
+
+                dispatch(appointmentSlice.actions.addHL7Appointments(doctor.schedule));
             }
         } catch (error) {
             console.error("Failed to fetch appointments:", error);

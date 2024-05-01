@@ -8,7 +8,24 @@ import { fetchHL7AppointmentsDataThunk } from "./appointment-slice";
 import HL7Segment from "./appointment-slice";
 import { useDispatch, useSelector } from "react-redux";
 import { TAppDispatch } from "../../redux/store";
+import { RootState } from '../../redux/store';
 import HL7Appointment from "./appointment-slice"; // Import your slice actions
+
+
+interface Appointment {
+    appointmentReason: string;
+    appointmentDuration: string;
+    requestedStartDateTimeRange: string;
+    priorityARQ: string;
+    repeatingInterval: string;
+    repeatingIntervalDuration: string;
+    placerContactPerson: string;
+    PlacerContactPhoneNumber: string;
+    booked: boolean;
+    _id: string;
+    createdAt: string;
+    updatedAt: string;
+}
 
 const Doctor = () => {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -20,14 +37,11 @@ const Doctor = () => {
     };
     const { doctorId } = useParams();
     const dispatch = useDispatch<TAppDispatch>();
-    const appointments = useSelector(
-        (state: { appointments: { schedule: Array<any> } }) =>
-            state.appointments.schedule || []
-    );
-
+    const appointments = useSelector((state: RootState) => state.appointments as Appointment[] || []);
+    console.log(appointments)
     useEffect(() => {
         dispatch(fetchHL7AppointmentsDataThunk(String(doctorId)));
-    }, [dispatch, doctorId, appointments]);
+    }, [doctorId,appointments]); // Fetch appointments when doctorId changes
 
     return (
         <div className="h-screen">
@@ -44,25 +58,25 @@ const Doctor = () => {
                     </header>
                     <div className="overflow-x-auto mt-6">
                         <table className="min-w-full leading-normal">
-                            <thead>
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                    Appointment ID
-                                </th>
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                    Appointment Date & Time
-                                </th>
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                    Duration
-                                </th>
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                    Priority
-                                </th>
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                    Reason
-                                </th>
-                            </thead>
+                        <thead>
+                        <th className="px-5 py-3 border-b-2 border-gray-300 bg-blue-600 text-left text-xs font-semibold text-white uppercase tracking-wider">
+                            Appointment ID
+                        </th>
+                        <th className="px-5 py-3 border-b-2 border-gray-300 bg-blue-600 text-left text-xs font-semibold text-white uppercase tracking-wider">
+                            Appointment Date & Time
+                        </th>
+                        <th className="px-5 py-3 border-b-2 border-gray-300 bg-blue-600 text-left text-xs font-semibold text-white uppercase tracking-wider">
+                            Duration
+                        </th>
+                        <th className="px-5 py-3 border-b-2 border-gray-300 bg-blue-600 text-left text-xs font-semibold text-white uppercase tracking-wider">
+                            Priority
+                        </th>
+                        <th className="px-5 py-3 border-b-2 border-gray-300 bg-blue-600 text-left text-xs font-semibold text-white uppercase tracking-wider">
+                            Reason
+                        </th>
+                    </thead>
                             <tbody>
-                                {appointments.length > 0 ? (
+                                {appointments? (
                                     appointments.map(
                                         (appointment, index: number) => (
                                             <tr key={index}>
