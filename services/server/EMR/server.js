@@ -1,12 +1,14 @@
 // Core Modules
 const bodyParser = require("body-parser");
+const path = require('path');
 
 // Third Party Modules
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
-const net = require("net");
+const http = require('http');
+const socketIo = require('socket.io');
 
 // Project Files
 dotenv.config({ path: "config.env" });
@@ -28,10 +30,24 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'uploads')));
+app.use(express.static(path.join(__dirname, 'static')));
+app.use(express.static(path.join(__dirname, 'templates')));
 
 // Handle requests for /favicon.ico
 app.get("/favicon.ico", (req, res) => {
     res.status(204).end();
+});
+
+// Route for the patient portal page
+app.get("/patient-portal", (req, res) => {
+  res.sendFile(path.join(__dirname, 'templates', 'patientPortal.html'));
+});
+
+// Route for the appointments page
+app.get("/appointments/:doctorId", (req, res) => {
+  res.sendFile(__dirname + "/templates/appointments.html");
 });
 
 // MOUNT ROUTES
@@ -60,8 +76,7 @@ app.listen(PORT, () => {
 });
 
 // ######################################### TCP SERVER #########################################
-const http = require('http');
-const socketIo = require('socket.io');
+
 const server = http.createServer(app);
 
 // Setup CORS
