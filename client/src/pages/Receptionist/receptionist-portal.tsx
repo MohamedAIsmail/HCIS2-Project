@@ -4,21 +4,13 @@ import Sidebar from "../../layout/Sidebar/Sidebar";
 import Navbar from "../../layout/Navbar/Navbar";
 
 interface PatientData {
-    username: string;
-    email: string;
-    password: string;
-    role: string;
-    name: string;
-    ssnNumberPatient: string;
-    phoneNumber: string;
-    weight: number;
-    height: number;
-    age: number;
-    gender: string;
-    emergencyContacts: Array<any>;
-    medicalHistory: any;
+    patientName: string;
+    phoneNumberHome: string;
+    religion: string;
+    ssnNumberPatient: number;
+    birthPlace: string;
+    dateTimeOfBirth: string;
 }
-
 interface PatientDataMap {
     [key: string]: PatientData;
 }
@@ -34,6 +26,7 @@ export default function ReceptionistPortal() {
                 );
                 console.log(response.data.patients);
                 setPatientData(response.data.patients); // Access the array with the key 'patients'
+                
             } catch (error) {
                 console.error("Error fetching patients:", error);
             }
@@ -66,10 +59,10 @@ export default function ReceptionistPortal() {
                                         Phone Number
                                     </th>
                                     <th className="border px-4 py-2 min-w-[150px] border-gray-300 bg-blue-600 text-white uppercase">
-                                        Email
+                                        SSN Number
                                     </th>
                                     <th className="border px-4 py-2 min-w-[150px] border-gray-300 bg-blue-600 text-white uppercase">
-                                        Age
+                                        Birthplace
                                     </th>
                                 </tr>
                             </thead>
@@ -78,16 +71,17 @@ export default function ReceptionistPortal() {
                                     (patient: PatientData, index: number) => (
                                         <tr key={index}>
                                             <td className="border px-4 py-2  border-b border-gray-200 bg-white text-sm">
-                                                {patient.name}
+                                                {patient.patientName}
                                             </td>
                                             <td className="border px-4 py-2  border-b border-gray-200 bg-white text-sm">
-                                                {patient.phoneNumber || "N/A"}
+                                                {patient.phoneNumberHome ||
+                                                    "N/A"}
                                             </td>
                                             <td className="border px-4 py-2 border-b border-gray-200 bg-white text-sm">
-                                                {patient.email}
+                                                {patient.ssnNumberPatient}
                                             </td>
                                             <td className="border px-4 py-2 border-b border-gray-200 bg-white text-sm">
-                                                {patient.age || "N/A"}
+                                                {patient.birthPlace}
                                             </td>
                                         </tr>
                                     )

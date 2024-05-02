@@ -54,6 +54,7 @@ const Receptionist = () => {
                 }
             });
         });
+
         encodeHL7Message(mappedData);
         const socket = io("http://localhost:8080/", {
             withCredentials: true,
@@ -80,6 +81,7 @@ const Receptionist = () => {
         });
 
         socket.on("disconnect", () => {
+            alert("Patients added successfully!");
             console.log("Disconnected from server");
         });
 
