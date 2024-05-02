@@ -2,16 +2,13 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import Popup from "reactjs-popup";
 import AddDoctor from "./AddDoctor";
-import { Add } from "@mui/icons-material";
 import { useSelector, useDispatch } from "react-redux";
-
 import { IDoctor } from "../Doctor/doctor-slice";
 import { IStore } from "../../models/store";
 import {
     fetchDoctorsDataThunk,
     deleteDoctorThunk,
 } from "../Doctor/doctor-slice";
-
 import { TAppDispatch } from "../../redux/store";
 import Navbar from "../../layout/Navbar/Navbar";
 import Sidebar from "../../layout/Sidebar/Sidebar";

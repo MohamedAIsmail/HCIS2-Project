@@ -5,11 +5,9 @@ import AddAppointment from "./AddAppointment";
 import Popup from "reactjs-popup";
 import { useParams } from "react-router-dom";
 import { fetchHL7AppointmentsDataThunk } from "./appointment-slice";
-import HL7Segment from "./appointment-slice";
 import { useDispatch, useSelector } from "react-redux";
 import { TAppDispatch } from "../../redux/store";
 import { RootState } from '../../redux/store';
-import HL7Appointment from "./appointment-slice"; // Import your slice actions
 import axios from 'axios';
 interface PatientNames {
     [key: string]: string;

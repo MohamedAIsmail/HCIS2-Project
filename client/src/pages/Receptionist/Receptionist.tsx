@@ -6,9 +6,7 @@ import {
     ParsedMessage,
 } from "../../utils/HL7Encoder";
 import io from "socket.io-client";
-
 import Navbar from "../../layout/Navbar/Navbar";
-
 import type { DatePickerProps } from "antd";
 import { DatePicker, Space } from "antd";
 

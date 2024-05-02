@@ -11,7 +11,6 @@ import Container from "@mui/material/Container";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import { FormEvent } from "react";
 import { useDispatch } from "react-redux";
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import { TAppDispatch } from "../../redux/store";
