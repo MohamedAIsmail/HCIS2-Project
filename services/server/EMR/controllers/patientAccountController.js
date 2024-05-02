@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const PatientAccount = require("../models/patientAccountModel");
 const HealthcareProvider = require("../models/healthcareProviderModel");
+const PatientRegister = require("../models/patientRegisterModel");
 
 // @desc    Book appointment
 // @route   PUT /api/v1/patient/:patientId/:doctorId/:appointmentId
@@ -11,28 +12,39 @@ exports.bookAppointment = asyncHandler(async (req, res) => {
 
     const patient = await PatientAccount.findById(patientId);
     if (!patient) {
-        return res.status(404).json({ success: false, message: `No patient found` });
-    };
+        return res
+            .status(404)
+            .json({ success: false, message: `No patient found` });
+    }
 
     const doctor = await HealthcareProvider.findOneAndUpdate(
-        { _id: doctorId, 'schedule._id': appointmentId },
-        { $set: { 'schedule.$.booked': booked, 'schedule.$.patientID': patientID }},
+        { _id: doctorId, "schedule._id": appointmentId },
+        {
+            $set: {
+                "schedule.$.booked": booked,
+                "schedule.$.patientID": patientID,
+            },
+        },
         { new: true, runValidators: true }
     );
 
     if (!doctor) {
-        return res.status(404).json({ success: false, message: `No doctor or appointment found` });
-    };
+        return res
+            .status(404)
+            .json({
+                success: false,
+                message: `No doctor or appointment found`,
+            });
+    }
 
     res.status(200).json({ doctor });
 });
-
 
 // @desc    Get list of patients
 // @route   GET /api/v1/patient
 // @access  Public
 exports.getPatients = asyncHandler(async (req, res) => {
-    const patients = await PatientAccount.find({});
+    const patients = await PatientRegister.find({});
     res.status(200).json({ patients });
 });
 
@@ -42,7 +54,12 @@ exports.getPatients = asyncHandler(async (req, res) => {
 exports.getPatient = asyncHandler(async (req, res) => {
     const patient = await PatientAccount.findById(req.params.id);
     if (!patient) {
-        return res.status(404).json({ success: false, message: `No patient found for this id: ${req.params.id}` });
+        return res
+            .status(404)
+            .json({
+                success: false,
+                message: `No patient found for this id: ${req.params.id}`,
+            });
     }
     res.status(200).json({ patient });
 });
@@ -67,7 +84,12 @@ exports.updatePatient = asyncHandler(async (req, res) => {
         runValidators: true,
     });
     if (!patient) {
-        return res.status(404).json({ success: false, message: `No patient found for this id: ${id}` });
+        return res
+            .status(404)
+            .json({
+                success: false,
+                message: `No patient found for this id: ${id}`,
+            });
     }
     res.status(200).json({ patient });
 });
@@ -79,7 +101,12 @@ exports.deletePatient = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const deletedPatient = await PatientAccount.findByIdAndDelete(id);
     if (!deletedPatient) {
-        return res.status(404).json({ success: false, message: `No patient found for this id: ${id}` });
+        return res
+            .status(404)
+            .json({
+                success: false,
+                message: `No patient found for this id: ${id}`,
+            });
     }
     res.status(204).json({ data: {} });
 });
@@ -89,5 +116,5 @@ exports.deletePatient = asyncHandler(async (req, res) => {
 // @access Private
 exports.deleteAll = asyncHandler(async (req, res) => {
     await PatientAccount.deleteMany({});
-    res.json({ message: 'All patients have been deleted.' });
+    res.json({ message: "All patients have been deleted." });
 });
