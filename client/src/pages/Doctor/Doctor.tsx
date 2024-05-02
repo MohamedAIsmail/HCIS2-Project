@@ -7,8 +7,8 @@ import { useParams } from "react-router-dom";
 import { fetchHL7AppointmentsDataThunk } from "./appointment-slice";
 import { useDispatch, useSelector } from "react-redux";
 import { TAppDispatch } from "../../redux/store";
-import { RootState } from '../../redux/store';
-import axios from 'axios';
+import { RootState } from "../../redux/store";
+import axios from "axios";
 interface PatientNames {
     [key: string]: string;
 }
@@ -28,8 +28,8 @@ interface PatientData {
     height: number;
     age: number;
     gender: string;
-    emergencyContacts: Array<any>;  
-    medicalHistory: any;  
+    emergencyContacts: Array<any>;
+    medicalHistory: any;
 }
 
 interface Appointment {
@@ -49,8 +49,8 @@ interface Appointment {
 }
 
 const Doctor = () => {
-const [expandedRow, setExpandedRow] = useState<string | null>(null);
-const [hoveredRow, setHoveredRow] = useState<string | null>(null);
+    const [expandedRow, setExpandedRow] = useState<string | null>(null);
+    const [hoveredRow, setHoveredRow] = useState<string | null>(null);
 
     const [patientData, setPatientData] = useState<PatientDataMap>({});
     const [patientNames, setPatientNames] = useState<PatientNames>({});
@@ -63,140 +63,229 @@ const [hoveredRow, setHoveredRow] = useState<string | null>(null);
     };
     const { doctorId } = useParams();
     const dispatch = useDispatch<TAppDispatch>();
-    const appointments = useSelector((state: RootState) => state.appointments as Appointment[] || []);
+    const appointments = useSelector(
+        (state: RootState) => (state.appointments as Appointment[]) || []
+    );
     useEffect(() => {
         if (doctorId) {
             dispatch(fetchHL7AppointmentsDataThunk(String(doctorId)));
         }
-    }, [dispatch, doctorId ,appointments]);
+    }, [dispatch, doctorId, appointments]);
 
     useEffect(() => {
-        appointments.forEach(appointment => {
-            console.log(`Appointment ID: ${appointment._id}, Booked: ${appointment.booked}, Patient ID: ${appointment.patientID}`); // This will confirm what data you are working with.
+        appointments.forEach((appointment) => {
+            console.log(
+                `Appointment ID: ${appointment._id}, Booked: ${appointment.booked}, Patient ID: ${appointment.patientID}`
+            ); // This will confirm what data you are working with.
             if (appointment.booked && appointment.patientID) {
-                console.log('alo00')
+                console.log("alo00");
                 const patientId = appointment.patientID;
                 if (!patientNames[patientId]) {
-
-                    axios.get(`http://localhost:8000/api/v1/patient/${patientId}`)
-                        .then(response => {
+                    axios
+                        .get(
+                            `http://localhost:8000/api/v1/patient/${patientId}`
+                        )
+                        .then((response) => {
                             const patientInfo = response.data.patient;
-                            setPatientData(prev => ({
+                            setPatientData((prev) => ({
                                 ...prev,
-                                [patientId]: patientInfo
+                                [patientId]: patientInfo,
                             }));
-                            
-                        const name = response.data.patient.name;
-                            setPatientNames(prev => ({ ...prev, [patientId]: name }));
+
+                            const name = response.data.patient.name;
+                            setPatientNames((prev) => ({
+                                ...prev,
+                                [patientId]: name,
+                            }));
                         })
-                        .catch(error => console.error("Failed to fetch patient name:", error));
+                        .catch((error) =>
+                            console.error(
+                                "Failed to fetch patient name:",
+                                error
+                            )
+                        );
                 }
             }
         });
     }, [appointments]);
 
     return (
-        <div className="h-screen">
-            <div className="h-[calc(7%)]">
+        <div className="min-h-screen flex flex-col">
+            <div className="flex h-[calc(6%)]">
                 <Navbar />
             </div>
-            <div className="flex h-[calc(93%)]">
-                <div>
+            <div className="flex flex-1">
+                <div className="w-1/6">
                     <Sidebar />
                 </div>
                 <div className="w-5/6 p-4">
                     <header className="text-center py-4">
-                        <h1 className="text-2xl font-bold">Doctor Appointments</h1>
+                        <h1 className="text-2xl font-bold">
+                            Doctor Appointments
+                        </h1>
                     </header>
                     <div className="overflow-x-auto mt-6">
                         <table className="min-w-full leading-normal">
-                        <thead>
-    <tr>
-        <th className="px-5 py-3 border-b-2 border-gray-300 bg-blue-600 text-left text-xs font-semibold text-white uppercase tracking-wider">
-            Patient Name
-        </th>
-        <th className="px-5 py-3 border-b-2 border-gray-300 bg-blue-600 text-left text-xs font-semibold text-white uppercase tracking-wider">
-            Appointment Date & Time
-        </th>
-        <th className="px-5 py-3 border-b-2 border-gray-300 bg-blue-600 text-left text-xs font-semibold text-white uppercase tracking-wider">
-            Duration
-        </th>
-        <th className="px-5 py-3 border-b-2 border-gray-300 bg-blue-600 text-left text-xs font-semibold text-white uppercase tracking-wider">
-            Priority
-        </th>
-        <th className="px-5 py-3 border-b-2 border-gray-300 bg-blue-600 text-left text-xs font-semibold text-white uppercase tracking-wider">
-            Reason
-        </th>
-        <th className="px-5 py-3 border-b-2 border-gray-300 bg-blue-600 text-left text-xs font-semibold text-white uppercase tracking-wider">
-            Booking status
-        </th>
-    </tr>
-</thead>
-<tbody>
-    {appointments.map((appointment, index) => (
-        <React.Fragment key={index}>
-            <tr
-                onClick={() => {
-                    if (appointment.patientID === expandedRow) {
-                        setExpandedRow(null);
-                    } else {
-                        setExpandedRow(appointment.patientID ?? null);
-                    }
-                }}
-                onMouseEnter={() => setHoveredRow(appointment.patientID?? null)}
-                onMouseLeave={() => setHoveredRow(null)}
-                style={{
-                    cursor: 'pointer',
-                    backgroundColor: hoveredRow === appointment.patientID ? '#f5f5f5' : 'transparent'
-                }}
-            >
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {appointment.booked ? patientNames[appointment.patientID ?? ''] || 'Loading...' : ''}
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {appointment.requestedStartDateTimeRange}
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {appointment.appointmentDuration}
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {appointment.priorityARQ}
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {appointment.appointmentReason}
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {appointment.booked ? 'Booked' : 'Available'}
-                </td>
-            </tr>
-            {expandedRow === appointment.patientID && (
-                <tr style={{ backgroundColor: '#f0f0f0' }}> 
-                    <td colSpan={6} className="p-4">
-                        <div className="text-sm leading-5 text-gray-900">
-                            <strong>Email:</strong> {patientData[appointment.patientID]?.email}
-                            <br />
-                            <strong>Phone:</strong> {patientData[appointment.patientID]?.phoneNumber}
-                            <br />
-                            <strong>Age:</strong> {patientData[appointment.patientID]?.age}
-                            <br />
-                            <ul>
-                            {Object.entries(patientData[appointment.patientID]?.medicalHistory).map(([key, value]: [string, any]) => (
-                                <li key={key}>
-                                <strong>{key}:</strong> {value}
-                                </li>
-                            ))}
-                            </ul>
-
-                            <br />
-                        </div>
-                    </td>
-                </tr>
-            )}
-        </React.Fragment>
-    ))}
-</tbody>
-
-
+                            <thead>
+                                <tr>
+                                    <th className="px-5 py-3 border-b-2 border-gray-300 bg-blue-600 text-left text-xs font-semibold text-white uppercase tracking-wider">
+                                        Patient Name
+                                    </th>
+                                    <th className="px-5 py-3 border-b-2 border-gray-300 bg-blue-600 text-left text-xs font-semibold text-white uppercase tracking-wider">
+                                        Appointment Date & Time
+                                    </th>
+                                    <th className="px-5 py-3 border-b-2 border-gray-300 bg-blue-600 text-left text-xs font-semibold text-white uppercase tracking-wider">
+                                        Duration
+                                    </th>
+                                    <th className="px-5 py-3 border-b-2 border-gray-300 bg-blue-600 text-left text-xs font-semibold text-white uppercase tracking-wider">
+                                        Priority
+                                    </th>
+                                    <th className="px-5 py-3 border-b-2 border-gray-300 bg-blue-600 text-left text-xs font-semibold text-white uppercase tracking-wider">
+                                        Reason
+                                    </th>
+                                    <th className="px-5 py-3 border-b-2 border-gray-300 bg-blue-600 text-left text-xs font-semibold text-white uppercase tracking-wider">
+                                        Booking status
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {appointments.map((appointment, index) => (
+                                    <React.Fragment key={index}>
+                                        <tr
+                                            onClick={() => {
+                                                if (
+                                                    appointment.patientID ===
+                                                    expandedRow
+                                                ) {
+                                                    setExpandedRow(null);
+                                                } else {
+                                                    setExpandedRow(
+                                                        appointment.patientID ??
+                                                            null
+                                                    );
+                                                }
+                                            }}
+                                            onMouseEnter={() =>
+                                                setHoveredRow(
+                                                    appointment.patientID ??
+                                                        null
+                                                )
+                                            }
+                                            onMouseLeave={() =>
+                                                setHoveredRow(null)
+                                            }
+                                            style={{
+                                                cursor: "pointer",
+                                                backgroundColor:
+                                                    hoveredRow ===
+                                                    appointment.patientID
+                                                        ? "#f5f5f5"
+                                                        : "transparent",
+                                            }}
+                                        >
+                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                {appointment.booked
+                                                    ? patientNames[
+                                                          appointment.patientID ??
+                                                              ""
+                                                      ] || "Loading..."
+                                                    : ""}
+                                            </td>
+                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                {
+                                                    appointment.requestedStartDateTimeRange
+                                                }
+                                            </td>
+                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                {
+                                                    appointment.appointmentDuration
+                                                }
+                                            </td>
+                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                {appointment.priorityARQ}
+                                            </td>
+                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                {appointment.appointmentReason}
+                                            </td>
+                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                {appointment.booked
+                                                    ? "Booked"
+                                                    : "Available"}
+                                            </td>
+                                        </tr>
+                                        {expandedRow ===
+                                            appointment.patientID && (
+                                            <tr
+                                                style={{
+                                                    backgroundColor: "#f0f0f0",
+                                                }}
+                                            >
+                                                <td colSpan={6} className="p-4">
+                                                    <div className="text-sm leading-5 text-gray-900">
+                                                        <strong>Email:</strong>{" "}
+                                                        {
+                                                            patientData[
+                                                                appointment
+                                                                    .patientID
+                                                            ]?.email
+                                                        }
+                                                        <br />
+                                                        <strong>
+                                                            Phone:
+                                                        </strong>{" "}
+                                                        {
+                                                            patientData[
+                                                                appointment
+                                                                    .patientID
+                                                            ]?.phoneNumber
+                                                        }
+                                                        <br />
+                                                        <strong>
+                                                            Age:
+                                                        </strong>{" "}
+                                                        {
+                                                            patientData[
+                                                                appointment
+                                                                    .patientID
+                                                            ]?.age
+                                                        }
+                                                        <br />
+                                                        <ul>
+                                                            {Object.entries(
+                                                                patientData[
+                                                                    appointment
+                                                                        .patientID
+                                                                ]
+                                                                    ?.medicalHistory
+                                                            ).map(
+                                                                ([key, value]: [
+                                                                    string,
+                                                                    any
+                                                                ]) => (
+                                                                    <li
+                                                                        key={
+                                                                            key
+                                                                        }
+                                                                    >
+                                                                        <strong>
+                                                                            {
+                                                                                key
+                                                                            }
+                                                                            :
+                                                                        </strong>{" "}
+                                                                        {value}
+                                                                    </li>
+                                                                )
+                                                            )}
+                                                        </ul>
+                                                        <br />
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </React.Fragment>
+                                ))}
+                            </tbody>
                         </table>
                     </div>
 

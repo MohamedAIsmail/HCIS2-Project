@@ -56,11 +56,11 @@ export default function Admin() {
     }, [doctorsData, searchTerm]);
 
     return (
-        <div className="h-screen">
-            <div className="h-[calc(7%)]">
+        <div className="min-h-screen flex flex-col">
+            <div className="flex h-[calc(6%)]">
                 <Navbar />
             </div>
-            <div className="flex h-[calc(93%)]">
+            <div className="flex flex-1">
                 <div className="w-1/6">
                     <Sidebar />
                 </div>
@@ -75,9 +75,6 @@ export default function Admin() {
                         <table className="w-full border-collapse bordertable-auto">
                             <thead>
                                 <tr className="bg-gray-200">
-                                    <th className="border px-4 py-2 min-w-[150px]">
-                                        ID
-                                    </th>
                                     <th className="border px-4 py-2 min-w-[150px]">
                                         Name
                                     </th>
@@ -99,9 +96,6 @@ export default function Admin() {
                             <tbody className="text-center ">
                                 {filteredDoctorsData.map((item) => (
                                     <tr key={item._id}>
-                                        <td className="border px-4 py-2">
-                                            {item._id}
-                                        </td>
                                         <td className="border px-4 py-2">
                                             {item.name}
                                         </td>
