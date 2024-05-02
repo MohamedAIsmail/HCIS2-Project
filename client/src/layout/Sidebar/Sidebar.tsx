@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-
 import { PatientSidebarData } from "./PatientSidebarData";
 import { AdminSidebarData } from "./AdminSidebarData";
 import { DoctorSidebarData } from "./DoctorSidebarData";
 import { ReceptionistSidebarData } from "./ReceptionistSidebarData";
-
 import { CiLogout } from "react-icons/ci";
 
 const Sidebar = () => {

@@ -18,8 +18,6 @@ interface PatientDataMap {
     [key: string]: PatientData;
 }
 
-
-
 interface PatientData {
     username: string;
     email: string;

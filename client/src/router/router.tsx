@@ -1,6 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "../pages/authentication/Login";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Signup from "../pages/authentication/Signup";
 import Receptionist from "../pages/Receptionist/Receptionist";
 import AdminPage from "../pages/Admin/Admin";

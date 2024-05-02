@@ -1,16 +1,5 @@
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import {
-    parsedMessage,
-    encodeHL7Message,
-    ParsedMessage,
-} from "../../utils/HL7Encoder";
-import io from "socket.io-client";
 
+import { useEffect, useState } from "react";
 import axios from "axios";
 import Sidebar from "../../layout/Sidebar/Sidebar";
 import Navbar from "../../layout/Navbar/Navbar";
@@ -34,10 +23,6 @@ interface PatientData {
 interface PatientDataMap {
     [key: string]: PatientData;
 }
-
-
-
-
 
 export default function ReceptionistPortal() {
     const [patientData, setPatientData] = useState<PatientData[]>([]);

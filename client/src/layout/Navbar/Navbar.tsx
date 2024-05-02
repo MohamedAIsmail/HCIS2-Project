@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 const Navbar = () => {
@@ -12,7 +11,6 @@ const Navbar = () => {
                 <div className="text-xl font-bold text-white ml-8">
                     {userType.charAt(1).toUpperCase() +
                         userType.slice(2).toUpperCase()}
-                        
                 </div>
             </div>
         </div>

@@ -39,13 +39,11 @@ const Login = () => {
             Cookies.set("authToken", response.data.token);
 
             if (response.status === 200) {
-                // Assuming doctor's ID and role are part of the response for this example
                 if (response.data.user.role === 'doctor') {
                     navigate(`/doctor-portal/${response.data.user._id}`);
                 } else if (response.data.user.role === 'patient') {
                     navigate(`/patient-portal/${response.data.user._id}`);
-                }
-                else if (response.data.user.role === 'receptionist') {
+                } else if (response.data.user.role === 'receptionist') {
                     navigate(`/receptionist`);    
                 } else {
                     navigate(`/${response.data.user.role}-portal`);

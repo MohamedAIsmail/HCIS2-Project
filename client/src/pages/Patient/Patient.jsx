@@ -12,7 +12,6 @@ const Patient = () => {
             name: '',
             specialization: '',
             _id: ''
-
         }
     ]);
 

@@ -1,6 +1,3 @@
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -10,8 +7,6 @@ import {
 } from "../../utils/HL7Encoder";
 import io from "socket.io-client";
 
-import axios from "axios";
-import Sidebar from "../../layout/Sidebar/Sidebar";
 import Navbar from "../../layout/Navbar/Navbar";
 
 import type { DatePickerProps } from "antd";

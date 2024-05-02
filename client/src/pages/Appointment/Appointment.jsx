@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 import '../Patient/styles.css'; 
 
 const Appointment = () => {
-    const navigate = useNavigate()
     
     const patientId = window.location.pathname.split("/")[2]
     const doctorId = window.location.pathname.split("/")[3]
@@ -21,7 +19,6 @@ const Appointment = () => {
         
         const fetchAppointments = async () => {
             try {
-                // setDoctors(response.data.healthcareProviders);
                 const response = await axios.get(`http://localhost:8000/api/v1/appointment/${patientId}/${doctorId}`);
                 const appointments = response.data.schedule.filter(appointment => !appointment.booked);
                 setAppointments(appointments)
