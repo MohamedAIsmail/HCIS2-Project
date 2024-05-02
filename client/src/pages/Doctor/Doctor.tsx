@@ -99,7 +99,6 @@ const [hoveredRow, setHoveredRow] = useState<string | null>(null);
         });
     }, [appointments]);
 
-    console.log(patientData)
     return (
         <div className="h-screen">
             <div className="h-[calc(7%)]">

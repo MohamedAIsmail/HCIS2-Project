@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 import DoctorPage from "../pages/Doctor/Doctor";
 import PatientPage from "../pages/Patient/Patient.jsx";
 import AppointmentPage from "../pages/Appointment/Appointment.jsx";
+import ReceptionistPortal from "../pages/Receptionist/receptionist-portal";
 
 
 // Function to check if user is authenticated
@@ -33,7 +34,9 @@ const Router = () => {
         <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/receptionist" element={<Receptionist />} />
+            <Route path="/receptionist" element={<ReceptionistPortal/>} />
+            <Route path="/receptionist-add" element={<Receptionist/>} />
+
             <Route
                 path="/admin-portal"
                 element={<ProtectedRoute element={<AdminPage />} />}

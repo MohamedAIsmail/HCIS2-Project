@@ -4,6 +4,8 @@ import { useLocation } from "react-router-dom";
 import { PatientSidebarData } from "./PatientSidebarData";
 import { AdminSidebarData } from "./AdminSidebarData";
 import { DoctorSidebarData } from "./DoctorSidebarData";
+import { ReceptionistSidebarData } from "./ReceptionistSidebarData";
+
 import { CiLogout } from "react-icons/ci";
 
 const Sidebar = () => {
@@ -20,6 +22,8 @@ const Sidebar = () => {
                 return AdminSidebarData;
             case "/doctor":
                 return DoctorSidebarData;
+            case "/receptionist":
+                return ReceptionistSidebarData;
             default:
                 return PatientSidebarData;
         }
