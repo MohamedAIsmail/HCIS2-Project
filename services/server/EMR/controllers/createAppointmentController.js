@@ -7,6 +7,8 @@ exports.createAppointment = asyncHandler(async (req, res) => {
 
   const message = await parseHL7Message(req.body.hl7Message);
 
+  console.log(req.body.hl7Message);
+
   const appointmentDataARQ = message['2']['fields'];
 
   const appointmentDataAIS = message['3']['fields'];

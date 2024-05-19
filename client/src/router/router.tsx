@@ -8,7 +8,7 @@ import DoctorPage from "../pages/Doctor/Doctor";
 import PatientPage from "../pages/Patient/Patient.jsx";
 import AppointmentPage from "../pages/Appointment/Appointment.jsx";
 import ReceptionistPortal from "../pages/Receptionist/receptionist-portal";
-
+import DicomViewer from "../components/DicomViewer"; // Import the new DicomViewer component
 
 // Function to check if user is authenticated
 const isAuthenticated = () => {
@@ -33,8 +33,8 @@ const Router = () => {
         <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/receptionist" element={<ReceptionistPortal/>} />
-            <Route path="/receptionist-add" element={<Receptionist/>} />
+            <Route path="/receptionist" element={<ReceptionistPortal />} />
+            <Route path="/receptionist-add" element={<Receptionist />} />
 
             <Route
                 path="/admin-portal"
@@ -53,6 +53,11 @@ const Router = () => {
             <Route
                 path="/appointments/:patientId/:doctorId"
                 element={<ProtectedRoute element={<AppointmentPage />} />}
+            />
+
+            <Route
+                path="/dicom-viewer/:scanId"
+                element={<ProtectedRoute element={<DicomViewer />} />}
             />
 
             <Route path="/" element={<Login />} />

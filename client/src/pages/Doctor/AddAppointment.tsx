@@ -107,12 +107,13 @@ export default function AddAppointment({ onClose }: AddAppointmentProps) {
 
 
             const encodeHL7Mes = encodeHL7Message(appointmentData);
-
+            
             const dataFinal = JSON.stringify({
                 scenario: "createAppointment",
                 hl7Message: encodeHL7Mes
             });
 
+            console.log(dataFinal);
 
         dispatch(addHL7AppointmentThunk(dataFinal,String(doctorId)));
 

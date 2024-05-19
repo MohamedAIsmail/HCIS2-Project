@@ -1,14 +1,12 @@
 // Core Modules
 const bodyParser = require("body-parser");
-const path = require('path');
 
 // Third Party Modules
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
-const http = require('http');
-const socketIo = require('socket.io');
+const net = require("net");
 
 // Project Files
 dotenv.config({ path: "config.env" });
@@ -54,7 +52,7 @@ app.all("*", (req, res, next) => {
 // EXPLAINATION: any error occurs in req - res process is caught here
 app.use(globalError);
 
-const PORT = process.env.PORT || 8000;
+const PORT = 8000;
 
 // Starting the Express server on port 8000
 app.listen(PORT, () => {
@@ -62,11 +60,13 @@ app.listen(PORT, () => {
 });
 
 // ######################################### TCP SERVER #########################################
-
+const http = require('http');
+const socketIo = require('socket.io');
 const server = http.createServer(app);
+const io = require('socket.io-client');
 
 // Setup CORS
-const io = socketIo(server, {
+const io_server = socketIo(server, {
   cors: {
     origin: "http://localhost:3000",  // This should match the URL of your client app
     methods: ["GET", "POST"],
@@ -75,28 +75,29 @@ const io = socketIo(server, {
   }
 });
 
-io.on('connection', (socket) => {
+const otherServerSocket = io('http://192.168.8.8:8500', {
+  withCredentials: true,
+  extraHeaders: {
+    "my-custom-header": "abcd"
+  }
+});
+
+io_server.on('connection', (socket) => {
   console.log('New client connected');
   
+  // Reciving data on sendData
   socket.on('sendData', async (data) => {
-
+    console.log("Data sent:" + data);
     const parsedData = JSON.parse(data);
-
     const scenario = parsedData.scenario;
     delete parsedData["scenario"];
-
     let response;
-
-    if (scenario === "createAppointment") {
-        const id = parsedData.id;
-        delete parsedData["id"];
-        response = await createAppointment(parsedData, id);
-    } else {
-        response = await registerPatient(parsedData);
-        console.log(response)
-
-    }
-
+    otherServerSocket.emit('sendDataToServer', data);
+    otherServerSocket.on('response', (responseData) => {
+      response = responseData;
+      // console.log("Response Back:" + response);
+      socket.write(JSON.stringify(response));
+    });
     socket.write(JSON.stringify(response));
     });
 
@@ -106,5 +107,6 @@ io.on('connection', (socket) => {
 });
 
 server.listen(8080, () => {
-  console.log('Listening on port 8080');
+  console.log('Listening on port ' + 8080);
 });
+

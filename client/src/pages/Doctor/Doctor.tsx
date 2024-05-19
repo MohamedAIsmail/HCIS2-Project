@@ -74,11 +74,11 @@ const Doctor = () => {
 
     useEffect(() => {
         appointments.forEach((appointment) => {
-            console.log(
-                `Appointment ID: ${appointment._id}, Booked: ${appointment.booked}, Patient ID: ${appointment.patientID}`
-            ); // This will confirm what data you are working with.
+            // console.log(
+            //     `Appointment ID: ${appointment._id}, Booked: ${appointment.booked}, Patient ID: ${appointment.patientID}`
+            // ); // This will confirm what data you are working with.
             if (appointment.booked && appointment.patientID) {
-                console.log("alo00");
+                // console.log("alo00");
                 const patientId = appointment.patientID;
                 if (!patientNames[patientId]) {
                     axios
