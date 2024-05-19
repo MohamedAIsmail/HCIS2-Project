@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt');
 
 const patientAccountSchema = new mongoose.Schema(
     {
+        patientId: { type: Number },
+        
         email: {
             type: String,
             required: [true, 'Email is required'],
