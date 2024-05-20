@@ -34,7 +34,7 @@ interface PatientData {
     gender: string;
     emergencyContacts: Array<any>;
     medicalHistory: any;
-    patientId?: string; // Add a field for DICOM image URL
+    scanId?: string; // Add a field for DICOM image URL
 }
 
 interface Appointment {
@@ -54,26 +54,53 @@ interface Appointment {
 }
 
 
-
-const handleUploadDicom = (patientId: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+const handleUploadDicom = (patientId: string) => async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+        const reader = new FileReader();
+        reader.onload = async function () {
+            // Parse DICOM data
+            const byteArray = new Uint8Array(reader.result as ArrayBuffer);
+            const dataSet = dicomParser.parseDicom(byteArray);
 
-            const reader = new FileReader();
-            reader.onload = function () {
-                // Parse DICOM data
-                const byteArray = new Uint8Array(reader.result as ArrayBuffer);
-                const dataSet = dicomParser.parseDicom(byteArray);
+            // Extract patient ID from DICOM data
+            const dicomPatientID = dataSet.string('x00100020');
+            console.log("DICOM Patient ID:", dicomPatientID);
 
-                // Extract patient ID
-                const patientIDElement = dataSet.string('x00100020');
-                console.log("Patient ID:", patientIDElement);
+            try {
+                // Fetch the current patient data
+                const response = await axios.get(`http://localhost:8000/api/v1/patient/${patientId}`);
+                const patientData = response.data.patient;
+                console.log("Current patient data:", patientData.scanId);
+
+                // Update or add the scanId field with the new DICOM patient ID
+                patientData.scanId = dicomPatientID;
+
+                console.log("Updated patient data:", patientData.scanId);
+
+                // Save the updated patient data back to the database
+                await axios.put(`http://localhost:8000/api/v1/patient/${patientId}`, patientData);
+                console.log("scanId updated successfully.");
 
                 // Perform upload logic here
                 console.log("Uploading DICOM file:", file.name);
-            };
-            reader.readAsArrayBuffer(file);
-   
+
+                // Send binary data in POST request body
+                const uploadResponse = await fetch('http://localhost:80/orthanc/instances', {
+                    method: 'POST',
+                    body: byteArray
+                });
+
+                if (uploadResponse.ok) {
+                    console.log('DICOM file uploaded successfully.');
+                } else {
+                    console.error('Failed to upload DICOM file.');
+                }
+            } catch (error) {
+                console.error('Error handling DICOM upload:', error);
+            }
+        };
+        reader.readAsArrayBuffer(file);
     }
 };
 
@@ -322,7 +349,7 @@ const Doctor = () => {
                                                         <br />
                                                         {patientData[
                                                             appointment.patientID!
-                                                        ]?.patientId && (
+                                                        ]?.scanId && (
                                                             <button
                                                                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4"
                                                                 onClick={() =>
@@ -331,7 +358,7 @@ const Doctor = () => {
                                                                             appointment
                                                                                 .patientID!
                                                                         ]
-                                                                            .patientId as string
+                                                                            .scanId as string
                                                                     )
                                                                 }
                                                             >
@@ -340,7 +367,7 @@ const Doctor = () => {
                                                         )}
                 <label  htmlFor="file-upload" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
 >
-                Upload a newer scan
+                Upload a scan
             </label>
             <input
                 id="file-upload"

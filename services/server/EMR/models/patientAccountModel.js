@@ -65,6 +65,10 @@ const patientAccountSchema = new mongoose.Schema(
             type: String 
         },
 
+        scanId: { 
+            type: String 
+        },
+
         insurancePolicyNumber: { 
             type: String 
         },
