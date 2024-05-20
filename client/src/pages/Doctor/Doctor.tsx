@@ -11,6 +11,7 @@ import { RootState } from "../../redux/store";
 import axios from "axios";
 import DicomImage from "../../components/DicomImage"; // Import the DicomImage component
 import DicomViewer from "../../components/DicomViewer";
+import dicomParser from 'dicom-parser';
 
 interface PatientNames {
     [key: string]: string;
@@ -52,18 +53,31 @@ interface Appointment {
     patientID?: string;
 }
 
+
+
 const handleUploadDicom = (patientId: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-        // Check if the uploaded file is a DICOM file
-        if (file.type === "application/dicom") {
-            // Perform upload logic here
-            console.log("Uploading DICOM file:", file.name);
-        } else {
-            console.error("Invalid file type. Please upload a DICOM file.");
-        }
+
+            const reader = new FileReader();
+            reader.onload = function () {
+                // Parse DICOM data
+                const byteArray = new Uint8Array(reader.result as ArrayBuffer);
+                const dataSet = dicomParser.parseDicom(byteArray);
+
+                // Extract patient ID
+                const patientIDElement = dataSet.string('x00100020');
+                console.log("Patient ID:", patientIDElement);
+
+                // Perform upload logic here
+                console.log("Uploading DICOM file:", file.name);
+            };
+            reader.readAsArrayBuffer(file);
+   
     }
 };
+
+
 
 const Doctor = () => {
     const [expandedRow, setExpandedRow] = useState<string | null>(null);
@@ -310,7 +324,7 @@ const Doctor = () => {
                                                             appointment.patientID!
                                                         ]?.patientId && (
                                                             <button
-                                                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4"
                                                                 onClick={() =>
                                                                     handleOpenDicomPopup(
                                                                         patientData[
@@ -324,11 +338,16 @@ const Doctor = () => {
                                                                 Show Latest Scan
                                                             </button>
                                                         )}
-                <input
-                    type="file"
-                    // accept=".dcm"
-                    onChange={handleUploadDicom(appointment.patientID!)}
-                />
+                <label  htmlFor="file-upload" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+>
+                Upload a newer scan
+            </label>
+            <input
+                id="file-upload"
+                type="file"
+                style={{ display: 'none' }} // Hide the input visually
+                onChange={handleUploadDicom(appointment.patientID)}
+            />
                                                     </div>
                                                 </td>
                                             </tr>
