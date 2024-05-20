@@ -1,3 +1,4 @@
 node_modules/
 
 config.env
+fastapi/maskrcnn_resnet50_fpn.pth

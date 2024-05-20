@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import DicomImage from './DicomImage';
+import './DicomViewer.css'; // Ensure you have this CSS file or add the styles directly in your component
 
 const DicomViewer = () => {
   const { patientId } = useParams();
-  const [imageUrl, setImageUrl] = useState(null);
+  const [originalImageUrl, setOriginalImageUrl] = useState(null);
+  const [processedImageUrl, setProcessedImageUrl] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -71,9 +72,30 @@ const DicomViewer = () => {
         }
 
         const blob = await response.blob();
-        const imageUrl = URL.createObjectURL(blob);
-        console.log('Image URL:', imageUrl);
-        setImageUrl(imageUrl);
+        const originalImageUrl = URL.createObjectURL(blob);
+        console.log('Original Image URL:', originalImageUrl);
+        setOriginalImageUrl(originalImageUrl);
+
+        // Send a POST request to FastAPI with the rendered image
+        const formData = new FormData();
+        formData.append('file', blob, 'image.png');
+
+        console.log('Sending image to FastAPI for processing...');
+        response = await fetch('http://127.0.0.1:8000/segment', {
+          method: 'POST',
+          body: formData,
+        });
+
+        console.log('Response:', response);
+        if (!response.ok) {
+          throw new Error(`Failed to process image: ${response.statusText}`);
+        }
+
+
+        const processedBlob = await response.blob();
+        const processedImageUrl = URL.createObjectURL(processedBlob);
+        console.log('Processed Image URL:', processedImageUrl);
+        setProcessedImageUrl(processedImageUrl);
       } catch (error) {
         console.error('Error fetching rendered DICOM image:', error);
         setError(error.message);
@@ -85,9 +107,23 @@ const DicomViewer = () => {
 
   return (
     <div>
-      {error && <p>Error: {error}</p>}
-      {imageUrl && <img src={imageUrl} alt="DICOM Rendered Image" />}
-    </div>
+  {error && <p>Error: {error}</p>}
+  <div className="image-container">
+    {originalImageUrl && (
+      <div className="image-wrapper" style={{ width: "300px", height: "300px" }}>
+        <p>Original Image:</p>
+        <img src={originalImageUrl} alt="Original DICOM Image" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+      </div>
+    )}
+    {processedImageUrl && (
+      <div className="image-wrapper" style={{ width: "300px", height: "300px" }}>
+        <p>Processed Image:</p>
+        <img src={processedImageUrl} alt="Processed DICOM Image" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+      </div>
+    )}
+  </div>
+</div>
+
   );
 };
 

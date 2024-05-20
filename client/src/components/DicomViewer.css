@@ -1,0 +1,10 @@
+.image-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+  
+  .image-wrapper {
+    text-align: center;
+  }
+  
