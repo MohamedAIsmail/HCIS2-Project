@@ -52,6 +52,19 @@ interface Appointment {
     patientID?: string;
 }
 
+const handleUploadDicom = (patientId: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+        // Check if the uploaded file is a DICOM file
+        if (file.type === "application/dicom") {
+            // Perform upload logic here
+            console.log("Uploading DICOM file:", file.name);
+        } else {
+            console.error("Invalid file type. Please upload a DICOM file.");
+        }
+    }
+};
+
 const Doctor = () => {
     const [expandedRow, setExpandedRow] = useState<string | null>(null);
     const [hoveredRow, setHoveredRow] = useState<string | null>(null);
@@ -178,24 +191,6 @@ const Doctor = () => {
                                                             null
                                                     );
                                                 }
-                                                // Open DICOM popup if a DICOM image URL is available
-                                                const patientId =
-                                                    appointment.patientID;
-                                                console.log(
-                                                    "Patient ID:",
-                                                    patientId
-                                                );
-                                                if (patientId) {
-                                                    const dicomUrl =
-                                                        patientData[patientId]
-                                                            ?.patientId;
-                                                    console.log( "DICOM URL:", dicomUrl); // Log the DICOM URL to the console
-                                                    if (dicomUrl) {
-                                                        handleOpenDicomPopup(
-                                                            dicomUrl
-                                                        );
-                                                    }
-                                                }
                                             }}
                                             onMouseEnter={() =>
                                                 setHoveredRow(
@@ -258,7 +253,7 @@ const Doctor = () => {
                                                         {
                                                             patientData[
                                                                 appointment
-                                                                    .patientID
+                                                                    .patientID!
                                                             ]?.email
                                                         }
                                                         <br />
@@ -268,7 +263,7 @@ const Doctor = () => {
                                                         {
                                                             patientData[
                                                                 appointment
-                                                                    .patientID
+                                                                    .patientID!
                                                             ]?.phoneNumber
                                                         }
                                                         <br />
@@ -278,7 +273,7 @@ const Doctor = () => {
                                                         {
                                                             patientData[
                                                                 appointment
-                                                                    .patientID
+                                                                    .patientID!
                                                             ]?.age
                                                         }
                                                         <br />
@@ -286,7 +281,7 @@ const Doctor = () => {
                                                             {Object.entries(
                                                                 patientData[
                                                                     appointment
-                                                                        .patientID
+                                                                        .patientID!
                                                                 ]
                                                                     ?.medicalHistory
                                                             ).map(
@@ -311,6 +306,29 @@ const Doctor = () => {
                                                             )}
                                                         </ul>
                                                         <br />
+                                                        {patientData[
+                                                            appointment.patientID!
+                                                        ]?.patientId && (
+                                                            <button
+                                                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                                                onClick={() =>
+                                                                    handleOpenDicomPopup(
+                                                                        patientData[
+                                                                            appointment
+                                                                                .patientID!
+                                                                        ]
+                                                                            .patientId as string
+                                                                    )
+                                                                }
+                                                            >
+                                                                Show Latest Scan
+                                                            </button>
+                                                        )}
+                <input
+                    type="file"
+                    // accept=".dcm"
+                    onChange={handleUploadDicom(appointment.patientID!)}
+                />
                                                     </div>
                                                 </td>
                                             </tr>

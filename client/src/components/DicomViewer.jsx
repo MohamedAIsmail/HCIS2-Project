@@ -2,17 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import DicomImage from './DicomImage';
 
-
-
 const DicomViewer = () => {
   const { patientId } = useParams();
   const [imageUrl, setImageUrl] = useState(null);
   const [error, setError] = useState(null);
-  
 
   useEffect(() => {
     const fetchImage = async () => {
-        console.log("Fetching image for scan ID:", patientId);
+      console.log("Fetching image for scan ID:", patientId);
       try {
         // Fetch all studies for the patient
         let response = await fetch(`http://localhost:80/orthanc/dicom-web/studies?patientId=${patientId}`);
@@ -23,10 +20,16 @@ const DicomViewer = () => {
         if (studies.length === 0) {
           throw new Error('No studies found for this patient.');
         }
-        const studyInstanceUID = studies[0]['0020000D'].Value[0];
 
-        // Fetch all series for the first study
-        response = await fetch(`http://localhost:80/orthanc/dicom-web/studies/${studyInstanceUID}/series`);
+        // Choose the newest study
+        const newestStudy = studies.reduce((prevStudy, currentStudy) => {
+          return new Date(currentStudy.StudyDate) > new Date(prevStudy.StudyDate) ? currentStudy : prevStudy;
+        });
+
+        console.log('Newest study:', newestStudy['0020000D'].Value[0]);
+
+        // Fetch all series for the newest study
+        response = await fetch(`http://localhost:80/orthanc/dicom-web/studies/${newestStudy['0020000D'].Value[0]}/series`);
         if (!response.ok) {
           throw new Error(`Failed to fetch series: ${response.statusText}`);
         }
@@ -34,10 +37,14 @@ const DicomViewer = () => {
         if (series.length === 0) {
           throw new Error('No series found for this study.');
         }
-        const seriesInstanceUID = series[0]['0020000E'].Value[0];
 
-        // Fetch all instances for the first series
-        response = await fetch(`http://localhost:80/orthanc/dicom-web/studies/${studyInstanceUID}/series/${seriesInstanceUID}/instances`);
+        // Choose the newest series
+        const newestSeries = series.reduce((prevSeries, currentSeries) => {
+          return new Date(currentSeries.SeriesDate) > new Date(prevSeries.SeriesDate) ? currentSeries : prevSeries;
+        });
+
+        // Fetch all instances for the newest series
+        response = await fetch(`http://localhost:80/orthanc/dicom-web/studies/${newestStudy['0020000D'].Value[0]}/series/${newestSeries['0020000E'].Value[0]}/instances`);
         if (!response.ok) {
           throw new Error(`Failed to fetch instances: ${response.statusText}`);
         }
@@ -45,10 +52,14 @@ const DicomViewer = () => {
         if (instances.length === 0) {
           throw new Error('No instances found for this series.');
         }
-        const instanceUID = instances[0]['00080018'].Value[0];
 
-        // Fetch the rendered image for the first instance
-        const url = `http://localhost:80/orthanc/dicom-web/studies/${studyInstanceUID}/series/${seriesInstanceUID}/instances/${instanceUID}/rendered`;
+        // Choose the newest instance
+        const newestInstance = instances.reduce((prevInstance, currentInstance) => {
+          return new Date(currentInstance.InstanceCreationDate) > new Date(prevInstance.InstanceCreationDate) ? currentInstance : prevInstance;
+        });
+
+        // Fetch the rendered image for the newest instance
+        const url = `http://localhost:80/orthanc/dicom-web/studies/${newestStudy['0020000D'].Value[0]}/series/${newestSeries['0020000E'].Value[0]}/instances/${newestInstance['00080018'].Value[0]}/rendered`;
         response = await fetch(url, {
           headers: {
             'Accept': 'image/jpeg',
@@ -71,17 +82,13 @@ const DicomViewer = () => {
 
     fetchImage();
   }, [patientId]);
-      
 
-      return (
-        <div>
-          {error && <p>Error: {error}</p>}
-          {imageUrl && <img src={imageUrl} alt="DICOM Rendered Image" />}
-        
-
-        </div>
-      );
-      
+  return (
+    <div>
+      {error && <p>Error: {error}</p>}
+      {imageUrl && <img src={imageUrl} alt="DICOM Rendered Image" />}
+    </div>
+  );
 };
 
 export default DicomViewer;
