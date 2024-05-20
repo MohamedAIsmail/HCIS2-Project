@@ -9,6 +9,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { TAppDispatch } from "../../redux/store";
 import { RootState } from "../../redux/store";
 import axios from "axios";
+import DicomImage from "../../components/DicomImage"; // Import the DicomImage component
+import DicomViewer from "../../components/DicomViewer";
+
 interface PatientNames {
     [key: string]: string;
 }
@@ -30,6 +33,7 @@ interface PatientData {
     gender: string;
     emergencyContacts: Array<any>;
     medicalHistory: any;
+    patientId?: string; // Add a field for DICOM image URL
 }
 
 interface Appointment {
@@ -55,17 +59,33 @@ const Doctor = () => {
     const [patientData, setPatientData] = useState<PatientDataMap>({});
     const [patientNames, setPatientNames] = useState<PatientNames>({});
     const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [isDicomPopupOpen, setIsDicomPopupOpen] = useState(false);
+    const [dicomImageUrl, setDicomImageUrl] = useState<string | null>(null);
+
     const handleClosePopup = () => {
         setIsPopupOpen(false);
     };
+
     const handleOpenPopup = () => {
         setIsPopupOpen(true);
     };
+
+    const handleOpenDicomPopup = (url: string) => {
+        setDicomImageUrl(url);
+        setIsDicomPopupOpen(true);
+    };
+
+    const handleCloseDicomPopup = () => {
+        setIsDicomPopupOpen(false);
+        setDicomImageUrl(null);
+    };
+
     const { doctorId } = useParams();
     const dispatch = useDispatch<TAppDispatch>();
     const appointments = useSelector(
         (state: RootState) => (state.appointments as Appointment[]) || []
     );
+
     useEffect(() => {
         if (doctorId) {
             dispatch(fetchHL7AppointmentsDataThunk(String(doctorId)));
@@ -74,17 +94,11 @@ const Doctor = () => {
 
     useEffect(() => {
         appointments.forEach((appointment) => {
-            // console.log(
-            //     `Appointment ID: ${appointment._id}, Booked: ${appointment.booked}, Patient ID: ${appointment.patientID}`
-            // ); // This will confirm what data you are working with.
             if (appointment.booked && appointment.patientID) {
-                // console.log("alo00");
                 const patientId = appointment.patientID;
-                if (!patientNames[patientId]) {
+                if (patientId && !patientNames[patientId]) {
                     axios
-                        .get(
-                            `http://localhost:8000/api/v1/patient/${patientId}`
-                        )
+                        .get(`http://localhost:8000/api/v1/patient/${patientId}`)
                         .then((response) => {
                             const patientInfo = response.data.patient;
                             setPatientData((prev) => ({
@@ -163,6 +177,24 @@ const Doctor = () => {
                                                         appointment.patientID ??
                                                             null
                                                     );
+                                                }
+                                                // Open DICOM popup if a DICOM image URL is available
+                                                const patientId =
+                                                    appointment.patientID;
+                                                console.log(
+                                                    "Patient ID:",
+                                                    patientId
+                                                );
+                                                if (patientId) {
+                                                    const dicomUrl =
+                                                        patientData[patientId]
+                                                            ?.patientId;
+                                                    console.log( "DICOM URL:", dicomUrl); // Log the DICOM URL to the console
+                                                    if (dicomUrl) {
+                                                        handleOpenDicomPopup(
+                                                            dicomUrl
+                                                        );
+                                                    }
                                                 }
                                             }}
                                             onMouseEnter={() =>
@@ -317,6 +349,27 @@ const Doctor = () => {
                             <AddAppointment onClose={handleClosePopup} />
                         </Popup>
                     </div>
+
+                    <Popup
+                        contentStyle={{
+                            width: "100%",
+                            maxWidth: "60rem", // Adjusted for potentially more space
+                            padding: 0,
+                            borderRadius: "12px",
+                        }}
+                        open={isDicomPopupOpen}
+                        onClose={handleCloseDicomPopup}
+                        modal
+                        overlayStyle={{
+                            background: "rgba(0, 0, 0, 0.75)", // Slightly darker overlay for better focus on the popup
+                        }}
+                    >
+                        <div className="p-4">
+                            {dicomImageUrl && (
+                                <DicomViewer />
+                            )}
+                        </div>
+                    </Popup>
                 </div>
             </div>
         </div>

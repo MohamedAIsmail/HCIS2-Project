@@ -2,18 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import DicomImage from './DicomImage';
 
+
+
 const DicomViewer = () => {
-  const { scanId } = useParams();
+  const { patientId } = useParams();
   const [imageUrl, setImageUrl] = useState(null);
   const [error, setError] = useState(null);
   
 
   useEffect(() => {
     const fetchImage = async () => {
-        console.log("Fetching image for scan ID:", scanId);
+        console.log("Fetching image for scan ID:", patientId);
       try {
         // Fetch all studies for the patient
-        let response = await fetch(`http://localhost:80/orthanc/dicom-web/studies?scanId=${scanId}`);
+        let response = await fetch(`http://localhost:80/orthanc/dicom-web/studies?patientId=${patientId}`);
         if (!response.ok) {
           throw new Error(`Failed to fetch studies: ${response.statusText}`);
         }
@@ -59,6 +61,7 @@ const DicomViewer = () => {
 
         const blob = await response.blob();
         const imageUrl = URL.createObjectURL(blob);
+        console.log('Image URL:', imageUrl);
         setImageUrl(imageUrl);
       } catch (error) {
         console.error('Error fetching rendered DICOM image:', error);
@@ -67,13 +70,15 @@ const DicomViewer = () => {
     };
 
     fetchImage();
-  }, [scanId]);
+  }, [patientId]);
       
 
       return (
         <div>
           {error && <p>Error: {error}</p>}
           {imageUrl && <img src={imageUrl} alt="DICOM Rendered Image" />}
+        
+
         </div>
       );
       
